@@ -1,0 +1,17 @@
+ <form id="secureForm" class="contact-form" data-reveal="right" novalidate>
+
+  <input type="text" name="website" autocomplete="off" tabindex="-1" style="display:none;">
+  <input type="hidden" name="client_tz">
+  <input type="hidden" name="client_time">
+
+  <div class="input-wrapper">
+    <input type="text" name="fullname" placeholder="Name *" required class="input-field">
+    <input type="email" name="email" placeholder="Email *" required class="input-field">
+  </div>
+
+ <textarea name="message" placeholder="Message *" required class="input-field" maxlength="1000"></textarea>
+
+   <button id="secureSubmit" class="btn btn-secondary" type="submit">
+    <span>Send message</span>
+  </button>
+</form>

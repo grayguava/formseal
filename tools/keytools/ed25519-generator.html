@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Ed25519 Keypair Generator</title>
+<script src="../sodium.js"></script>
+
+<style>
+    body {
+        background:#ffffff;
+        font-family:"Space Grotesk", sans-serif;
+        display:flex;
+        justify-content:center;
+        padding-top:40px;
+    }
+
+    .container {
+        width:700px;
+        padding:25px;
+        border:2px solid #00b78a;
+        border-radius:6px;
+        box-shadow:4px 4px #00b78a;
+    }
+
+    h2 {
+        font-size:26px;
+        font-weight:700;
+        color:#00b78a;
+        text-align:center;
+        margin-bottom:25px;
+    }
+
+    h3 {
+        font-size:18px;
+        font-weight:600;
+        color:#06785d;
+        margin-bottom:10px;
+        margin-top:25px;
+    }
+
+    textarea {
+        width:100%;
+        padding:12px;
+        font-size:15px;
+        border:2px solid #00b78a;
+        border-radius:6px;
+        box-shadow:4px 4px #00b78a;
+        outline:none;
+        resize:vertical;
+        font-family:monospace;
+    }
+
+    button {
+        padding:12px;
+        font-size:15px;
+        font-weight:700;
+        border:2px solid #00b78a;
+        background:white;
+        border-radius:6px;
+        cursor:pointer;
+        box-shadow:4px 4px #00b78a;
+        margin-top:10px;
+        margin-right:10px;
+    }
+
+    button:active {
+        transform:translate(3px,3px);
+        box-shadow:0 0 #00b78a;
+    }
+
+    .row {
+        margin-bottom:25px;
+    }
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Ed25519 Keypair Generator</h2>
+<button id="genBtn">Generate Keypair</button>
+
+<div class="row">
+    <h3>Public Key (Base64URL)</h3>
+    <textarea id="pub" rows="2"></textarea><br>
+    <button onclick="copyText('pub')">Copy Public Key</button>
+</div>
+
+<div class="row">
+    <h3>Private Key (Base64URL)</h3>
+    <textarea id="priv" rows="2"></textarea><br>
+    <button onclick="copyText('priv')">Copy Private Key</button>
+</div>
+
+<div class="row">
+    <h3>JSON</h3>
+    <textarea id="json" rows="6"></textarea><br>
+    <button onclick="copyText('json')">Copy JSON</button>
+    <button onclick="downloadJSON()">Download JSON</button>
+</div>
+
+</div> <!-- container -->
+
+
+<script>
+function copyText(id) {
+    const el = document.getElementById(id);
+    el.select();
+    el.setSelectionRange(0, 99999);
+    navigator.clipboard.writeText(el.value);
+}
+
+function downloadJSON() {
+    const data = document.getElementById("json").value;
+    if (!data) return alert("No JSON to download.");
+
+    const blob = new Blob([data], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "ed25519-keypair.json";
+    a.click();
+
+    URL.revokeObjectURL(url);
+}
+
+(async () => {
+    await sodium.ready;
+    const S = sodium;
+
+    document.getElementById("genBtn").onclick = () => {
+        const kp = S.crypto_sign_keypair();
+
+        const pubB64  = S.to_base64(kp.publicKey,  S.base64_variants.URLSAFE_NO_PADDING);
+        const privB64 = S.to_base64(kp.privateKey, S.base64_variants.URLSAFE_NO_PADDING);
+
+        document.getElementById("pub").value  = pubB64;
+        document.getElementById("priv").value = privB64;
+
+        document.getElementById("json").value = JSON.stringify({
+            ed25519_public:  pubB64,
+            ed25519_private: privB64
+        }, null, 2);
+    };
+})();
+</script>
+
+</body>
+</html>

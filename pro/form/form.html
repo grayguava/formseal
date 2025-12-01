@@ -1,0 +1,28 @@
+<form id="secureForm" class="contact-form" data-reveal="right" novalidate>
+
+  <!-- Honeypot -->
+  <input type="text" name="website" autocomplete="off" tabindex="-1" style="display:none;">
+  <input type="hidden" name="client_tz">
+  <input type="hidden" name="client_time">
+
+  <div class="input-wrapper">
+    <input type="text" name="fullname" placeholder="Name *" required class="input-field">
+    <input type="email" name="email" placeholder="Email *" required class="input-field">
+  </div>
+
+  <textarea name="message" placeholder="Message *" required class="input-field" maxlength="1000"></textarea>
+
+  <!-- Turnstile widget -->
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+    <!-- PUT YOUR TURNSTILE SITE KEY IN THE PLACEHOLDER -->
+  <div class="cf-turnstile"
+       data-sitekey="YOUR_TURNSTILE_SITE_KEY"
+       data-callback="turnstileCallback"></div>  
+
+  <input type="hidden" id="cf_token" name="cf_token">
+
+  <button id="secureSubmit" class="btn btn-secondary" type="submit">
+    <span>Send message</span>  
+  </button>
+</form>

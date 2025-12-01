@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>CDF Tools Dashboard</title>
+
+<style>
+    body {
+        background:#ffffff;
+        font-family:"Space Grotesk", sans-serif;
+        display:flex;
+        justify-content:center;
+        padding-top:40px;
+    }
+
+    .container {
+        width:700px;
+        padding:25px;
+        border:2px solid #00b78a;
+        border-radius:6px;
+        box-shadow:4px 4px #00b78a;
+        text-align:center;
+    }
+
+    h1 {
+        font-size:32px;
+        font-weight:700;
+        color:#00b78a;
+        margin-bottom:25px;
+    }
+
+    .section-title {
+        font-size:20px;
+        font-weight:700;
+        color:#06785d;
+        margin-top:30px;
+        margin-bottom:10px;
+        text-align:left;
+    }
+
+    .tool-box {
+        border:2px solid #00b78a;
+        border-radius:6px;
+        padding:15px;
+        box-shadow:4px 4px #00b78a;
+        margin:15px 0;
+        text-align:left;
+    }
+
+    .tool-box:hover {
+        transform:translate(-1px,-1px);
+        box-shadow:6px 6px #00b78a;
+        transition:0.15s ease;
+    }
+
+    .tool-title {
+        font-size:18px;
+        font-weight:700;
+        color:#00b78a;
+        margin-bottom:6px;
+    }
+
+    .tool-desc {
+        font-size:15px;
+        margin-bottom:10px;
+        color:#222;
+    }
+
+    a.tool-link {
+        display:inline-block;
+        padding:10px 16px;
+        font-size:15px;
+        font-weight:700;
+        border:2px solid #00b78a;
+        background:white;
+        border-radius:6px;
+        cursor:pointer;
+        box-shadow:4px 4px #00b78a;
+        text-decoration:none;
+        color:#06785d;
+    }
+
+    a.tool-link:active {
+        transform:translate(3px,3px);
+        box-shadow:0 0 #00b78a;
+    }
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Tools Dashboard</h1>
+
+    <!-- ADMIN Tools -->
+    <div class="section-title">Admin Tools</div>
+
+    <div class="tool-box">
+        <div class="tool-title">Admin Panel</div>
+        <div class="tool-desc">Login, fetch messages, decrypt, filter, export CSV.</div>
+        <a class="tool-link" href="./admin/admin.html">Open →</a>
+    </div>
+
+    <div class="tool-box">
+        <div class="tool-title">Per-Message Decryptor</div>
+        <div class="tool-desc">Standalone decryptor for a single ciphertext from KV.</div>
+        <a class="tool-link" href="./admin/single-message-decryptor.html">Open →</a>
+    </div>
+
+
+    <!-- KEY Utilities -->
+    <div class="section-title">Keypair Tools</div>
+
+    <div class="tool-box">
+        <div class="tool-title">Ed25519 Generator</div>
+        <div class="tool-desc">Generate Ed25519 signing keypairs (admin login keys).</div>
+        <a class="tool-link" href="./keytools/ed25519-generator.html">Open →</a>
+    </div>
+
+    <div class="tool-box">
+        <div class="tool-title">X25519 Generator</div>
+        <div class="tool-desc">Generate X25519 sealed-box keypairs (form encryption keys).</div>
+        <a class="tool-link" href="./keytools/x25519-generator.html">Open →</a>
+    </div>
+
+    <div class="tool-box">
+        <div class="tool-title">Ed25519 Key Verifier</div>
+        <div class="tool-desc">Validate Ed25519 pub/priv pair correctness.</div>
+        <a class="tool-link" href="./keytools/verify-ed25119-pair.html">Open →</a>
+    </div>
+
+
+</div>
+
+</body>
+</html>

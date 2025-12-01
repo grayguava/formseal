@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Admin Panel – Crypt'daForm</title>
+
+<script src="../sodium.js"></script>
+
+<style>
+  body {
+    background:#ffffff;
+    font-family:"Space Grotesk", sans-serif;
+    display:flex;
+    justify-content:center;
+    padding-top:40px;
+  }
+
+ .screen {
+  width:900px;
+  padding:25px;
+  border:2px solid #00b78a;
+  border-radius:6px;
+  box-shadow:4px 4px #00b78a;
+  opacity:0;
+  transition:opacity 0.35s ease;
+  position:absolute;
+  pointer-events: none;
+}
+
+.visible {
+  opacity:1;
+  position:relative;
+  pointer-events: auto;
+}
+
+  .title {
+    font-size:26px;
+    color:#00b78a;
+    font-weight:700;
+    margin-bottom:15px;
+  }
+
+  input, textarea {
+    width:94%;
+    padding:10px;
+    font-size:15px;
+    border:2px solid #00b78a;
+    border-radius:5px;
+    box-shadow:4px 4px #00b78a;
+    margin-bottom:12px;
+    outline:none;
+  }
+
+  button {
+    width:100%;
+    padding:12px;
+    font-size:16px;
+    font-weight:700;
+    border:2px solid #00b78a;
+    background:white;
+    border-radius:5px;
+    cursor:pointer;
+    box-shadow:4px 4px #00b78a;
+  }
+
+  button:active {
+    box-shadow:0 0 #00b78a;
+    transform:translate(3px,3px);
+  }
+
+  /* TABLE UI */
+  .table-container {
+    margin-top:20px;
+    max-height:500px;
+    overflow-y:auto;
+    border:2px solid #00b78a;
+    border-radius:6px;
+  }
+
+  table {
+    width:100%;
+    border-collapse:collapse;
+    font-size:14px;
+  }
+
+  thead {
+    background:#eaffe9;
+    position:sticky;
+    top:0;
+    z-index:2;
+  }
+
+  th, td {
+    padding:10px;
+    border-bottom:1px solid #00b78a33;
+    text-align:left;
+    vertical-align:top;
+  }
+
+  th {
+    font-weight:700;
+    color:#06785d;
+    border-bottom:2px solid #00b78a;
+  }
+
+  tr:hover {
+    background:#f6fff6;
+  }
+
+</style>
+</head>
+
+
+<body>
+
+<!-- SCREEN 1 – LOGIN -->
+<div id="screen1" class="screen visible">
+  <div class="title">Admin Login</div>
+
+  <input id="adminPriv" type="password" placeholder="Paste Ed25519 PRIVATE KEY">
+  <button id="loginBtn">Login →</button>
+  <div id="loginStatus" style="margin-top:10px;"></div>
+</div>
+
+
+<!-- SCREEN 2 – LOAD ENCRYPTED -->
+<div id="screen2" class="screen">
+  <div class="title">Fetch Encrypted Messages</div>
+  <div id="loadStatus" style="margin:10px 0; color:#06785d; font-weight:600;"></div>
+
+  <button id="loadBtn">Load Messages</button>
+  <textarea id="cipherDump" rows="8" readonly
+    placeholder="Encrypted messages will appear here..."></textarea>
+</div>
+
+
+<!-- SCREEN 3 – DECRYPT -->
+<div id="screen3" class="screen">
+  <div class="title">Decrypt Messages</div>
+  <div id="decryptStatus" style="margin:10px 0; color:#06785d; font-weight:600;"></div>
+
+  <input id="formPriv" type="password" placeholder="Paste X25519 FORM PRIVATE KEY">
+  <button id="decBtn">Decrypt All</button>
+
+  <!-- SEARCH + FILTERS + CSV EXPORT -->
+  <div style="margin-top:20px; display:flex; gap:10px;">
+    <input id="searchInput" type="text" placeholder="Search…" 
+           style="flex:2; padding:10px; border:2px solid #00b78a; border-radius:6px;">
+    
+    <select id="filterField" 
+            style="flex:1; padding:10px; border:2px solid #00b78a; border-radius:6px;">
+      <option value="all">All Fields</option>
+      <option value="id">ID</option>
+      <option value="fullname">Name</option>
+      <option value="email">Email</option>
+      <option value="message">Message</option>
+      <option value="client_time">Time</option>
+    </select>
+
+    <button id="exportCSVBtn" 
+            style="flex:1; padding:10px; border:2px solid #00b78a; border-radius:6px;">
+      Export CSV
+    </button>
+  </div>
+
+
+  <!-- CLEAN TABLE -->
+  <div class="table-container">
+    <table id="msgTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Message</th>
+          <th>Time</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+
+
+
+<script>
+
+window.onerror = (msg, url, line) => alert("JS ERROR: " + msg + " (line " + line + ")");
+
+const WORKER = "https://<YOUR_WORKER_URL>.workers.dev";  //* PATSE YOUR WORKER URL HERE
+let sessionToken = null;
+
+function showScreen(id) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("visible"));
+  document.getElementById(id).classList.add("visible");
+}
+
+
+/* 1. LOGIN */
+document.getElementById("loginBtn").onclick = async () => {
+  await sodium.ready;
+
+  const adminPriv = document.getElementById("adminPriv").value.trim();
+  const status = document.getElementById("loginStatus");
+
+  if (!adminPriv) {
+    status.textContent = "Missing private key.";
+    return;
+  }
+
+  const privBytes = sodium.from_base64(adminPriv, sodium.base64_variants.URLSAFE_NO_PADDING);
+
+  const msgBytes = new TextEncoder().encode("admin-login-" + Date.now());
+  const signature = sodium.crypto_sign_detached(msgBytes, privBytes);
+
+  const res = await fetch(WORKER + "/api/login", {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      message: bytesToBase64Url(msgBytes),
+      signature: bytesToBase64Url(signature)
+    })
+  });
+
+  const json = await res.json();
+  if (!json.ok) {
+    status.textContent = "Login failed.";
+    return;
+  }
+
+  sessionToken = json.token;
+  status.textContent = "✔ Login successful — session active.";
+
+  setTimeout(() => showScreen("screen2"), 400);
+};
+
+
+
+/* 2. LOAD */
+document.getElementById("loadBtn").onclick = async () => {
+  const loadStatus = document.getElementById("loadStatus");
+  loadStatus.textContent = "⏳ Fetching encrypted messages…";
+
+  try {
+    const res = await fetch(WORKER + "/api/all", {
+      headers: { "X-Admin-Token": sessionToken }
+    });
+
+    if (!res.ok) {
+      loadStatus.textContent = "❌ Worker responded with error (" + res.status + ")";
+      return;
+    }
+
+    const json = await res.json();
+    document.getElementById("cipherDump").value =
+      JSON.stringify(json.messages, null, 2);
+
+    loadStatus.textContent = "✔ Messages loaded. Proceed to decryption.";
+    setTimeout(() => showScreen("screen3"), 400);
+
+  } catch (err) {
+    loadStatus.textContent = "❌ Network error.";
+  }
+};
+
+
+
+/* 3. DECRYPT (rewritten to store rows globally) */
+document.getElementById("decBtn").onclick = async () => {
+  await sodium.ready;
+
+  const decryptStatus = document.getElementById("decryptStatus");
+  decryptStatus.textContent = "⏳ Decrypting messages…";
+
+  const formPriv = document.getElementById("formPriv").value.trim();
+  if (!formPriv) {
+    decryptStatus.textContent = "❌ Missing form private key.";
+    return;
+  }
+
+  const privBytes = sodium.from_base64(formPriv, sodium.base64_variants.URLSAFE_NO_PADDING);
+  const pubBytes = sodium.crypto_scalarmult_base(privBytes);
+
+  let ciphertexts;
+  try {
+    ciphertexts = JSON.parse(document.getElementById("cipherDump").value);
+  } catch {
+    decryptStatus.textContent = "❌ Invalid ciphertext JSON.";
+    return;
+  }
+
+  window.__DECRYPTED_ROWS = [];
+  let ok = 0, fail = 0;
+
+  for (const id in ciphertexts) {
+    try {
+      const cipherBytes = sodium.from_base64(
+        ciphertexts[id],
+        sodium.base64_variants.URLSAFE_NO_PADDING
+      );
+
+      const plain = sodium.crypto_box_seal_open(
+        cipherBytes,
+        pubBytes,
+        privBytes
+      );
+
+      const json = JSON.parse(new TextDecoder().decode(plain));
+
+      window.__DECRYPTED_ROWS.push({
+        id,
+        fullname: json.fullname,
+        email: json.email,
+        message: json.message,
+        client_time: json.client_time
+      });
+
+      ok++;
+
+    } catch {
+      window.__DECRYPTED_ROWS.push({
+        id,
+        fullname: "",
+        email: "",
+        message: "FAILED TO DECRYPT",
+        client_time: ""
+      });
+
+      fail++;
+    }
+  }
+
+  renderTable(window.__DECRYPTED_ROWS);
+  decryptStatus.textContent = `✔ Done. Successfully decrypted ${ok}, failed ${fail}.`;
+};
+
+
+
+/* TABLE RENDER FUNCTION */
+function renderTable(rows) {
+  const tbody = document.querySelector("#msgTable tbody");
+  tbody.innerHTML = "";
+
+  for (const row of rows) {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${row.id}</td>
+      <td>${row.fullname}</td>
+      <td>${row.email}</td>
+      <td>${row.message}</td>
+      <td>${row.client_time}</td>
+    `;
+    tbody.appendChild(tr);
+  }
+}
+
+
+
+/* SEARCH + FILTER */
+document.getElementById("searchInput").addEventListener("input", applyFilters);
+document.getElementById("filterField").addEventListener("change", applyFilters);
+
+function applyFilters() {
+  const query = document.getElementById("searchInput").value.toLowerCase();
+  const field = document.getElementById("filterField").value;
+
+  const filtered = window.__DECRYPTED_ROWS.filter(row => {
+    if (!query) return true;
+
+    if (field === "all") {
+      return Object.values(row).some(v =>
+        (v + "").toLowerCase().includes(query)
+      );
+    } else {
+      return (row[field] + "").toLowerCase().includes(query);
+    }
+  });
+
+  renderTable(filtered);
+}
+
+
+
+/* EXPORT TO CSV */
+document.getElementById("exportCSVBtn").onclick = () => {
+  if (!window.__DECRYPTED_ROWS) return;
+
+  const rows = window.__DECRYPTED_ROWS;
+  const headers = ["ID","Name","Email","Message","Time"];
+
+  let csv = headers.join(",") + "\n";
+
+  for (const r of rows) {
+    const row = [
+      r.id,
+      `"${r.fullname.replace(/"/g,'""')}"`,
+      `"${r.email.replace(/"/g,'""')}"`,
+      `"${r.message.replace(/"/g,'""')}"`,
+      r.client_time
+    ].join(",");
+    csv += row + "\n";
+  }
+
+  const blob = new Blob([csv], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "messages.csv";
+  a.click();
+
+  URL.revokeObjectURL(url);
+};
+
+
+
+/* Base64URL Helper */
+function bytesToBase64Url(bytes) {
+  let bin = "";
+  bytes.forEach(b => bin += String.fromCharCode(b));
+  return btoa(bin).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/, "");
+}
+
+</script>
+
+</body>
+</html>
