@@ -127,7 +127,7 @@ A complete setup guide with screenshots is available in the `docs/` directory.
 
 ## 📜 License
 MIT License — permissive and commercial-friendly.  
-See the LICENSE file for details.
+See the [LICENSE](LICENSE) file for details.
 
 ---
 
