@@ -8,7 +8,7 @@ If you discover a security vulnerability, **do not open a public GitHub issue.**
 
 Instead, please use GitHub’s **Private Vulnerability Report** feature:
 
-https://github.com/arbyte/formseal/security/advisories/new
+https://github.com/ar-nubis/formseal/security/advisories/new
 
 This ensures the report remains confidential until it is reviewed and resolved.
 
