@@ -1,0 +1,31 @@
+# wrangler.toml.example
+# This is NOT a deployable config.
+# It documents the required bindings for FormSeal.
+
+# ----------------------------------
+# Secrets
+# ----------------------------------
+# These MUST be set as Cloudflare *Secrets*
+# (never as plain vars)
+
+# Used to derive per-challenge salts.
+# Type: high-entropy random string
+# Generation: openssl rand -base64 32
+FS_POW_SECRET = "<random-secret>"
+
+# Used to authenticate internal write requests.
+# Type: high-entropy random string
+# Must be DIFFERENT from GUAVA_POW_SECRET
+FS_WRITE_SECRET = "<random-secret>"
+
+
+# ----------------------------------
+# KV namespaces
+# ----------------------------------
+# These must be bound as KV namespaces.
+
+# Stores per-IP / per-fingerprint rate limits
+FS_RATELIMIT = "<kv-namespace>"
+
+# Stores encrypted submissions (ciphertext only)
+FS_SUBMITS = "<kv-namespace>"

@@ -1,136 +1,233 @@
 # FormSeal
-**End-to-end encrypted contact form system for Cloudflare Workers**  
-_Server-blind · Client-side E2EE · Stateless Ed25519 admin login_
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](#license)
-![Cloudflare Workers](https://img.shields.io/badge/Cloudflare-Workers-F38020?logo=cloudflare&logoColor=white)
-![Encryption](https://img.shields.io/badge/E2EE-X25519%20%2B%20AES--GCM-blue)
-![Status](https://img.shields.io/badge/Production--Ready-Yes-success)
+FormSeal is a **secure form submission pipeline** designed for public-facing forms where the backend should not be trusted with plaintext data.
 
-FormSeal is a server-blind, end-to-end encrypted contact form system built for Cloudflare Workers.  
-Messages are encrypted entirely in the browser (X25519 + AES-GCM) and stored as ciphertext in KV.  
-Admins decrypt locally using their private key — the Worker never sees plaintext.
+It encrypts submissions **in the browser**, applies **basic abuse mitigation**, and stores **only ciphertext** on the backend.  
+The server is intentionally blind.
+
+FormSeal is a _pipeline_, not a hosted service or UI product.
 
 ---
 
-## 🚀 Quickstart (5 Steps)
+## Why FormSeal exists
 
-### 1. Generate Keys
-Open in your browser:
-- /tools/keytools/x25519-generator.html  
-- /tools/keytools/ed25519-generator.html  
+Most contact form solutions assume:
 
-Save:
-- FORM_PUBLIC_KEY / FORM_PRIVATE_KEY  
-- ADMIN_PUBLIC_KEY / ADMIN_PRIVATE_KEY  
+- the backend is trusted
+- stored messages can be read server-side
+- operators won’t mishandle keys or formats
 
----
+FormSeal rejects these assumptions.
 
-### 2. Configure Worker
-In Cloudflare Dashboard → Worker Settings:
-- Bind KV: MESSAGES  
-- Add ADMIN_PUBLIC_KEY  
-- (Pro) Add TURNSTILE_SECRET  
+It is intended for cases where:
 
-Publish the Worker.
+- the backend must never see plaintext
+- submissions may be anonymous
+- basic automated abuse should be discouraged
+- operators want explicit control over keys and data handling
 
 ---
 
-### 3. Configure the Form
-Inside basic/, enhanced/ or pro/ set:
-- FORM_PUBLIC_KEY  
-- WORKER_ENDPOINT  
-- (Pro) TURNSTILE_SITEKEY  
+## High-level design
+
+FormSeal separates concerns deliberately:
+
+- **Client**: payload construction, encryption, proof-of-work
+- **Backend**: basic abuse mitigation and blind storage
+- **Operator environment**: inspection and decryption (offline)
+
+The backend never holds decryption keys and cannot read submissions.
 
 ---
 
-### 4. Host Frontend + Tools
-Any static host works:
-Cloudflare Pages, Netlify, GitHub Pages, etc.
-
----
-
-### 5. Use Admin Panel
-Open:
-/tools/admin/admin.html
-
-Decrypt messages locally using:
-- ADMIN_PRIVATE_KEY  
-- FORM_PRIVATE_KEY  
-
----
-
-## 🔒 Key Features
-
-- End-to-end encryption (X25519 sealed boxes + AES-GCM)
-- Server-blind storage (KV stores ciphertext only)
-- Stateless Ed25519 admin authentication
-- Local-only decryption (plaintext never leaves your device)
-- No build tools, npm, or bundlers — pure HTML + JS
-- Multiple variants: Basic, Enhanced, Pro (Turnstile)
-- Full tooling suite (admin panel, key generators, validators)
-
----
-
-## 🧱 Variants
-
-| Variant     | Security     | Privacy | Notes |
-|-------------|--------------|---------|-------|
-| **Basic**   | Minimal      | High | Pure E2EE, no rate limits, no Turnstile |
-| **Enhanced**| High         | High    | Rate limits, spam filtering, size caps |
-| **Pro**     | Very High    | Lower   | Turnstile validation, strongest bot protection |
-
----
-
-## 🧰 Tools Included
-
-- X25519 + Ed25519 key generators  
-- Keypair validator  
-- Admin dashboard (login → fetch → decrypt → search → export)  
-- Single-message decryptor  
-- Tools hub: /tools/index.html
-
----
-
-## 📁 Repository Structure
+## High-level flow
 
 ```
-/
-├── basic/
-├── enhanced/
-├── pro/
-│
-├── tools/
-│   ├── index.html
-│   ├── sodium.js
-│   │
-│   ├── admin/
-│   │   ├── admin.html
-│   │   └── single-message-decryptor.html
-│   │
-│   └── keytools/
-│       ├── ed25519-generator.html
-│       ├── x25519-generator.html
-│       └── verify-ed25519-pair.html
-│
-├── LICENSE
-├── README.md
-└── .gitignore
+Client
+  → /api/challenge
+  → client-side PoW + encryption
+  → /api/verify
+  → /api/write
+  → KV (ciphertext only)
 ```
 
 ---
 
-## 📘 Full Documentation
-A complete setup guide with screenshots is available in the `docs/` directory.
+## What FormSeal does NOT do
+
+- No admin dashboard
+- No server-side decryption
+- No message rendering
+- No session-based admin authentication
+- No claim of strong abuse prevention
+
+These are **intentional design choices**, not missing features.
 
 ---
 
-## 📜 License
-MIT License — permissive and commercial-friendly.  
-See the [LICENSE](LICENSE) file for details.
+## Repository structure
+
+Understanding the structure is important before attempting deployment.
+
+```
+formseal/
+├─ frontend/        # Client-side pipeline (encryption, PoW)
+├─ backend/         # Cloudflare Pages Functions (blind ingestion)
+├─ wrangler.toml.example
+├─ README.md
+└─ LICENSE
+```
+
+### `frontend/`
+
+Contains browser-side logic:
+
+- payload construction
+- client-side encryption (libsodium)
+- proof-of-work
+- basic sanity checks
+
+This code **must be configured by the operator** before use.
+
+### `backend/`
+
+Contains the ingestion backend:
+
+- challenge issuance
+- PoW verification
+- replay checks
+- rate limiting
+- ciphertext storage
+
+The backend is intentionally minimal and does not expose an admin surface.
+
+### `wrangler.toml.example`
+
+Documents the **deployment contract**:
+
+- required secrets
+- required KV bindings
+- expected value types
+
+This file is **documentation**, not a deployable configuration.
 
 ---
 
-## ⭐ Support
-If you find FormSeal useful, consider starring the repository.  
-It helps others discover privacy-focused alternatives.
+## Configuration model (important)
+
+FormSeal uses **two separate configuration layers**.
+
+### 1. Frontend configuration (required)
+
+Located in:
+
+```
+frontend/js/config.js
+```
+
+This includes:
+
+- payload version
+- PoW parameters
+- **x25519 public key**
+
+The repository ships with:
+
+```
+x25519PublicKey: null
+```
+
+Form submission will fail until this is configured.  
+This is intentional and prevents accidental misconfiguration.
+
+---
+
+### 2. Backend environment bindings (required)
+
+Backend functions rely on environment bindings injected at runtime.
+
+Required bindings are documented in:
+
+`wrangler.toml.example`
+
+#### Required secrets
+
+- `FS_POW_SECRET`  
+    Used to derive per-challenge salts.
+
+- `FS_WRITE_SECRET`  
+    Used to authenticate internal write requests.  
+    Must be distinct from `FS_POW_SECRET`.
+
+#### Required KV namespaces
+
+- `FS_RATELIMIT` — basic rate limiting and replay tracking
+- `FS_SUBMITS` — encrypted submission storage
+
+If any required binding is missing, the backend fails closed.
+
+---
+
+## Admin tooling and inspection
+
+This repository does **not** include admin panels or submission viewers.
+
+Operators are expected to:
+
+- export encrypted submissions
+- decrypt and inspect them offline
+- convert formats for analysis if needed
+
+This separation is intentional to keep the ingestion pipeline small and auditable.
+
+Operator tooling is provided in a **[separate repository](https://github.com/grayguava/formseal-tools)**.
+
+---
+
+## Threat model (summary)
+
+### Mitigated (to a limited degree)
+
+- Casual automated spam
+- Simple replay attempts
+- Accidental plaintext exposure on the backend
+
+### Not mitigated
+
+- Determined attackers
+- High-volume distributed abuse
+- Compromised client devices
+- Private key theft
+- Traffic correlation
+
+FormSeal provides **basic resistance**, not guarantees.
+
+---
+
+## Deployment guidance
+
+The README intentionally avoids step-by-step deployment instructions.
+
+Instead:
+
+- the pipeline is documented here
+- required bindings are documented in `wrangler.toml.example`
+- provider-specific deployment notes belong in `/docs`
+
+Reference deployment documentation will live under:
+
+`docs/deployment/`
+
+---
+
+## Scope
+
+This repository documents **the FormSeal pipeline only**.
+
+It is not:
+
+- a hosted service
+- a full contact form solution
+- an admin product
+
+Those concerns are intentionally handled elsewhere.
