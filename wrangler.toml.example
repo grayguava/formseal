@@ -1,31 +1,76 @@
-# wrangler.toml.example
-# This is NOT a deployable config.
-# It documents the required bindings for FormSeal.
+# This file documents the required Cloudflare bindings for FormSeal.
+# It is NOT intended to be deployed directly.
+#
+# IMPORTANT:
+# FormSeal uses logical environment keys (e.g. POW_SECRET, EXPORT_TOKENS)
+# which are mapped to Cloudflare binding names in `functions/_shared/env.js`.
+#
+# You MAY rename the Cloudflare binding names (e.g. GUAVA_EXPORT_TOKENS)
+# to anything you want, as long as:
+#   1. the binding name here matches your Cloudflare configuration
+#   2. the same name is referenced in `env.js`
+#
+# The application code itself does not need to be modified.
 
-# ----------------------------------
-# Secrets
-# ----------------------------------
-# These MUST be set as Cloudflare *Secrets*
-# (never as plain vars)
+name = "formseal"
+compatibility_date = "2026-02-02"
 
-# Used to derive per-challenge salts.
-# Type: high-entropy random string
-# Generation: openssl rand -base64 32
-FS_POW_SECRET = "<random-secret>"
+# ==================================================
+# Secret bindings (injection type: secret)
+# ==================================================
+#
+# These values are injected securely by Cloudflare.
+# "secret" here refers to the binding mechanism only.
+#
+# Set using:
+#   wrangler secret put <BINDING_NAME>
+#
 
-# Used to authenticate internal write requests.
-# Type: high-entropy random string
-# Must be DIFFERENT from GUAVA_POW_SECRET
-FS_WRITE_SECRET = "<random-secret>"
+# Logical key: POW_SECRET
+# Binding name defined in env.js
+# Default binding name: GUAVA_POW_SECRET
+#
+# wrangler secret put GUAVA_POW_SECRET
+
+# Logical key: WRITE_SECRET
+# Binding name defined in env.js
+# Default binding name: GUAVA_WRITE_SECRET
+#
+# wrangler secret put GUAVA_WRITE_SECRET
+
+# Logical key: ADMIN_AUTOMATION_SECRET
+# Binding name defined in env.js
+# Default binding name: GUAVA_ADMIN_AUTOMATION_SECRET
+#
+# wrangler secret put GUAVA_ADMIN_AUTOMATION_SECRET
 
 
-# ----------------------------------
-# KV namespaces
-# ----------------------------------
-# These must be bound as KV namespaces.
+# ==================================================
+# KV namespace bindings
+# ==================================================
+#
+# These bindings map logical keys in the code to KV namespaces.
+# The binding names shown here are examples only.
+# You may rename them if you update env.js accordingly.
+#
 
-# Stores per-IP / per-fingerprint rate limits
-FS_RATELIMIT = "<kv-namespace>"
+# Logical key: RATELIMIT
+# Default binding name: GUAVA_RATELIMIT
+[[kv_namespaces]]
+binding = "GUAVA_RATELIMIT"
+id = "RATELIMIT_KV_NAMESPACE_ID"
+preview_id = "RATELIMIT_KV_PREVIEW_ID"
 
-# Stores encrypted submissions (ciphertext only)
-FS_SUBMITS = "<kv-namespace>"
+# Logical key: FORMSUBMITS
+# Default binding name: GUAVA_FORMSUBMITS
+[[kv_namespaces]]
+binding = "GUAVA_FORMSUBMITS"
+id = "FORMSUBMITS_KV_NAMESPACE_ID"
+preview_id = "FORMSUBMITS_KV_PREVIEW_ID"
+
+# Logical key: EXPORT_TOKENS
+# Default binding name: GUAVA_EXPORT_TOKENS
+[[kv_namespaces]]
+binding = "GUAVA_EXPORT_TOKENS"
+id = "EXPORT_TOKENS_KV_NAMESPACE_ID"
+preview_id = "EXPORT_TOKENS_KV_PREVIEW_ID"

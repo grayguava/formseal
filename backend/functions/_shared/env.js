@@ -1,14 +1,16 @@
-// backend/functions/_shared/env.js
-// Backend environment variable schema (NAMES ONLY)
+// functions/_shared/env.js
 
 export const ENV = {
-  
-  // Secrets
-  POW_SECRET: "FS_POW_SECRET",
-  WRITE_SECRET: "FS_WRITE_SECRET",
+  // existing
+  POW_SECRET: "GUAVA_POW_SECRET", //SECRET VAR
+  WRITE_SECRET: "GUAVA_WRITE_SECRET", //SECRET VAR
 
+  RATELIMIT: "GUAVA_RATELIMIT", //KV NAMESPACE
+  FORMSUBMITS: "GUAVA_FORMSUBMITS", //KV NAMESPACE
+
+  // export system
+  EXPORT_TOKENS: "GUAVA_EXPORT_TOKENS", //KV NAMESPACE
   
-  // KV bindings
-  RATELIMIT: "FS_RATELIMIT",
-  FORMSUBMITS: "FS_SUBMITS"
+  // automation (NEW)
+  ADMIN_AUTOMATION_SECRET: "GUAVA_ADMIN_AUTOMATION_SECRET" // >32 bytes random secret (variable)
 };
