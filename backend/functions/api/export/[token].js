@@ -1,5 +1,13 @@
+// functions/api/export/[token].js
+
 import { ENV } from "../../_shared/env.js";
 import { authenticate } from "../../_shared/auth.js";
+
+/* =========================
+   CONSTANTS
+========================= */
+
+const MAX_EXPORT = 50_000; // safety cap, operator-side protection
 
 /* =========================
    HELPERS
@@ -7,30 +15,17 @@ import { authenticate } from "../../_shared/auth.js";
 
 function formatUtcTimestamp() {
   const d = new Date();
-
-  const dd = String(d.getUTCDate()).padStart(2, "0");
-  const mm = String(d.getUTCMonth() + 1).padStart(2, "0");
-  const yyyy = d.getUTCFullYear();
-
-  const hh = String(d.getUTCHours()).padStart(2, "0");
-  const min = String(d.getUTCMinutes()).padStart(2, "0");
-  const sec = String(d.getUTCSeconds()).padStart(2, "0");
-
-  return `${dd}-${mm}-${yyyy} at ${hh}:${min}:${sec}`;
+  return d.toISOString().replace("T", " ").replace("Z", " UTC");
 }
 
 function formatFilenameTimestamp() {
   const d = new Date();
+  const pad = n => String(n).padStart(2, "0");
 
-  const dd = String(d.getUTCDate()).padStart(2, "0");
-  const mm = String(d.getUTCMonth() + 1).padStart(2, "0");
-  const yyyy = d.getUTCFullYear();
-
-  const hh = String(d.getUTCHours()).padStart(2, "0");
-  const min = String(d.getUTCMinutes()).padStart(2, "0");
-  const sec = String(d.getUTCSeconds()).padStart(2, "0");
-
-  return `${dd}${mm}${yyyy}-${hh}.${min}.${sec}`;
+  return (
+    `${pad(d.getUTCDate())}${pad(d.getUTCMonth() + 1)}${d.getUTCFullYear()}` +
+    `-${pad(d.getUTCHours())}.${pad(d.getUTCMinutes())}.${pad(d.getUTCSeconds())}`
+  );
 }
 
 function randomHex(bytes = 6) {
@@ -44,7 +39,11 @@ function randomHex(bytes = 6) {
 ========================= */
 
 export async function onRequestGet({ request, params, env }) {
-  // ---- AUTH (NEW) ----
+  // NOTE:
+  // Export requires BOTH:
+  // - valid admin automation bearer secret
+  // - valid, unexpired, single-use export token
+
   const authResult = await authenticate({ request, env });
   if (!authResult.ok) {
     return authResult.response;
@@ -52,39 +51,42 @@ export async function onRequestGet({ request, params, env }) {
 
   const { adminId } = authResult.auth;
 
-  // ---- TOKEN LOOKUP ----
   const token = params.token;
-  if (!token) return new Response("Not found", { status: 404 });
+  if (!token) {
+    return new Response("Invalid token", { status: 400 });
+  }
 
   const tokenKey = `export:${token}`;
   const raw = await env[ENV.EXPORT_TOKENS].get(tokenKey);
-  if (!raw) return new Response("Invalid or expired token", { status: 404 });
+
+  if (!raw) {
+    return new Response("Invalid or expired token", { status: 404 });
+  }
 
   let record;
   try {
     record = JSON.parse(raw);
   } catch {
-    return new Response("Corrupt token", { status: 500 });
+    await env[ENV.EXPORT_TOKENS].delete(tokenKey);
+    return new Response("Invalid token", { status: 400 });
   }
 
-  // ---- EXPIRY CHECK ----
   const now = Math.floor(Date.now() / 1000);
   if (now > record.exp) {
     await env[ENV.EXPORT_TOKENS].delete(tokenKey);
     return new Response("Expired", { status: 404 });
   }
 
-  // ---- IDENTITY ENFORCEMENT (CRITICAL) ----
   if (record.adminId !== adminId) {
     await env[ENV.EXPORT_TOKENS].delete(tokenKey);
     return new Response("Forbidden", { status: 403 });
   }
 
-  // ---- burn token BEFORE streaming ----
+  // burn token BEFORE streaming
   await env[ENV.EXPORT_TOKENS].delete(tokenKey);
 
   /* =========================
-     METADATA STATE
+     STREAM STATE
   ========================= */
 
   let exportedCount = 0;
@@ -96,37 +98,28 @@ export async function onRequestGet({ request, params, env }) {
     errors.push({ code, reason });
   }
 
-  /* =========================
-     STREAM SETUP
-  ========================= */
-
   const encoder = new TextEncoder();
   const { readable, writable } = new TransformStream();
   const writer = writable.getWriter();
 
-  const url = new URL(request.url);
-
   (async () => {
     try {
-      /* ---------- HEADER META ---------- */
-      const headerMeta = {
-        type: "meta",
-        export_time_utc: formatUtcTimestamp(),
-        kv_namespace: ENV.FORMSUBMITS,
-        source: {
-          hostname: url.hostname,
-          path: url.pathname
-        }
-      };
-
+      // ---- HEADER META ----
       await writer.write(
         encoder.encode(
-          JSON.stringify(headerMeta, null, 2) +
-          "\n\n\n\n"
+          JSON.stringify(
+            {
+              type: "meta",
+              export_time_utc: formatUtcTimestamp(),
+              kv_namespace: ENV.FORMSUBMITS
+            },
+            null,
+            2
+          ) + "\n\n\n"
         )
       );
 
-      /* ---------- DATA STREAM ---------- */
+      // ---- DATA STREAM ----
       let cursor;
       do {
         let list;
@@ -138,6 +131,11 @@ export async function onRequestGet({ request, params, env }) {
         }
 
         for (const k of list.keys) {
+          if (exportedCount >= MAX_EXPORT) {
+            recordError("EXPORT_LIMIT", "Maximum export size reached");
+            break;
+          }
+
           try {
             const val = await env[ENV.FORMSUBMITS].get(k.name);
             if (val === null) {
@@ -158,24 +156,25 @@ export async function onRequestGet({ request, params, env }) {
         }
 
         cursor = list.cursor;
-      } while (cursor);
+      } while (cursor && exportedCount < MAX_EXPORT);
 
-      /* ---------- FOOTER META ---------- */
-      const footerMeta = {
-        type: "summary",
-        total_entries: exportedCount,
-        truncated,
-        errors
-      };
-
+      // ---- FOOTER META ----
       await writer.write(
         encoder.encode(
-          "\n\n\n" +
-          JSON.stringify(footerMeta, null, 2) +
-          "\n"
+          "\n\n" +
+            JSON.stringify(
+              {
+                type: "summary",
+                total_entries: exportedCount,
+                truncated,
+                errors
+              },
+              null,
+              2
+            ) +
+            "\n"
         )
       );
-
     } catch {
       writer.abort();
       return;
