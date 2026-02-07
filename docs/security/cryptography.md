@@ -72,6 +72,24 @@ the sender does **not** need a keypair.
 
 ---
 
+### Library provenance
+
+Client-side sealed box encryption is implemented using a **locally vendored**
+browser build of libsodium.
+
+- The library is not loaded from a CDN.
+- The exact upstream build version is unknown due to historical local inclusion.
+- The file is treated as immutable and pinned by cryptographic hash.
+- Only the sealed box API surface is relied upon.
+
+Details of the vendored file, including its SHA-256 hash, are documented in
+`VENDOR.md`.
+
+The JavaScript implementation is **not part of the trust boundary**.
+Correctness is defined by successful server-side decryption using libsodium.
+
+---
+
 ### Why sealed boxes
 
 Sealed boxes are chosen because they:
