@@ -1,0 +1,94 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: "Version bump type"
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Compute next version
+        id: version
+        run: |
+          LATEST=$(git tag --sort=-version:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -1)
+          if [ -z "$LATEST" ]; then
+            LATEST="v0.0.0"
+          fi
+          CURRENT="${LATEST#v}"
+          MAJOR=$(echo "$CURRENT" | cut -d. -f1)
+          MINOR=$(echo "$CURRENT" | cut -d. -f2)
+          PATCH=$(echo "$CURRENT" | cut -d. -f3)
+
+          case "${{ github.event.inputs.bump }}" in
+            major) MAJOR=$((MAJOR + 1)); MINOR=0; PATCH=0 ;;
+            minor) MINOR=$((MINOR + 1)); PATCH=0 ;;
+            patch) PATCH=$((PATCH + 1)) ;;
+          esac
+
+          NEXT="v${MAJOR}.${MINOR}.${PATCH}"
+          echo "tag=${NEXT}" >> $GITHUB_OUTPUT
+          echo "version=${MAJOR}.${MINOR}.${PATCH}" >> $GITHUB_OUTPUT
+
+      - name: Tag release
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag ${{ steps.version.outputs.tag }}
+          git push origin ${{ steps.version.outputs.tag }}
+
+      - name: Build assets
+        id: assets
+        run: |
+          VERSION=${{ steps.version.outputs.version }}
+          BASENAME="formseal_client-v${VERSION}"
+
+          # Stage src/ as formseal/ internally
+          mkdir -p staging/formseal
+          cp -r src/. staging/formseal/
+
+          # zip
+          cd staging
+          zip -r "../${BASENAME}.zip" formseal/
+          cd ..
+
+          # tarball
+          tar -czf "${BASENAME}.tar.gz" -C staging formseal/
+
+          # SHA-256 of both
+          SHA_ZIP=$(sha256sum "${BASENAME}.zip"    | awk '{print $1}')
+          SHA_TAR=$(sha256sum "${BASENAME}.tar.gz" | awk '{print $1}')
+
+          echo "basename=${BASENAME}" >> $GITHUB_OUTPUT
+          echo "sha_zip=${SHA_ZIP}"   >> $GITHUB_OUTPUT
+          echo "sha_tar=${SHA_TAR}"   >> $GITHUB_OUTPUT
+
+      - name: Create draft release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: "formseal ${{ steps.version.outputs.tag }}"
+          draft: true
+          files: |
+            ${{ steps.assets.outputs.basename }}.zip
+            ${{ steps.assets.outputs.basename }}.tar.gz
+          body: |
+            sha256:
+            `${{ steps.assets.outputs.basename }}.zip`  ${{ steps.assets.outputs.sha_zip }}
+            `${{ steps.assets.outputs.basename }}.tar.gz`  ${{ steps.assets.outputs.sha_tar }}
