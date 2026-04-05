@@ -1,5 +1,5 @@
 {
-  "name": "@formseal/client",
+  "name": "formseal",
   "description": "Drop-in client-side encrypted contact form.",
   "license": "MIT",
   "bin": {
