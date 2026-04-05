@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact</title>
+  <style>
+
+    body        { font-family: sans-serif; max-width: 540px; margin: 2rem auto; padding: 0 1rem; }
+    label       { display: block; font-weight: 600; margin-bottom: 0.25rem; }
+    input, textarea {
+      display: block; width: 100%; box-sizing: border-box;
+      padding: 0.5rem 0.75rem; font-size: 1rem; font-family: inherit;
+      border: 1px solid #ccc; border-radius: 4px; margin-bottom: 0.25rem;
+    }
+    input:focus, textarea:focus { outline: 2px solid #0057ff; border-color: transparent; }
+    input[aria-invalid="true"], textarea[aria-invalid="true"] { border-color: #d00; }
+    textarea    { resize: vertical; }
+
+    [data-fs-error] { display: block; color: #d00; font-size: 0.82rem; min-height: 1.1em; margin-bottom: 0.75rem; }
+
+    button      { padding: 0.6rem 1.5rem; font-size: 1rem; background: #0057ff; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
+    button:disabled { opacity: 0.55; cursor: not-allowed; }
+
+    #contact-status { margin-top: 1rem; font-size: 0.95rem; }
+    #contact-status[data-fs-status="success"] { color: #1e6b3a; }
+    #contact-status[data-fs-status="error"]   { color: #a10000; }
+  </style>
+</head>
+<body>
+
+  <h1>Contact</h1>
+
+
+  <form id="contact-form" novalidate autocomplete="on">
+
+    <input
+      type="text"
+      name="_hp"
+      tabindex="-1"
+      autocomplete="off"
+      aria-hidden="true"
+      style="position:absolute; left:-9999px; opacity:0; height:0;"
+    >
+
+    <div>
+      <label for="field-name">Your name</label>
+      <input type="text" id="field-name" name="name" placeholder="Jane Smith" autocomplete="name">
+      <span data-fs-error="name"></span>
+    </div>
+
+    <div>
+      <label for="field-email">Email address</label>
+      <input type="email" id="field-email" name="email" placeholder="you@example.com" autocomplete="email">
+      <span data-fs-error="email"></span>
+    </div>
+
+    <div>
+      <label for="field-message">Message</label>
+      <textarea id="field-message" name="message" rows="5" placeholder="Context-rich messages are appreciated."></textarea>
+      <span data-fs-error="message"></span>
+    </div>
+
+    <button type="submit" id="contact-submit">Send message</button>
+
+  </form>
+
+  <div id="contact-status" role="status" aria-live="polite"></div>
+
+
+  <script>
+    window.formsealCallbacks = {
+      onSuccess: function (response) {
+        console.log("Submitted:", response);
+      },
+      onError: function (error) {
+        console.error("Failed:", error);
+      },
+    };
+  </script>
+
+  <script src="/src/globals.js"></script>
+
+</body>
+</html>
