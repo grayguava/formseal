@@ -1,4 +1,8 @@
 // globals.js
+// Single entry point. Drop this one script tag in your HTML.
+//
+// Usage:
+//   <script src="formseal-embed/globals.js"></script>
 
 (function () {
   "use strict";
@@ -15,12 +19,11 @@
 
   var FILES = [
     "vendor/sodium.js",
-    "config/fields.schema.js",
-    "config/formseal.config.js",
-    "_function/fs.crypto.js",
-    "_function/fs.payload.js",
-    "_function/fs.validate.js",
-    "_function/fs.form.js",
+    "config/fse.config.js",
+    "runtime/fse.crypto.js",
+    "runtime/fse.payload.js",
+    "runtime/fse.validate.js",
+    "runtime/fse.form.js",
   ];
 
   function loadNext(index) {
@@ -28,15 +31,15 @@
       try {
         sodium.ready.then(function () {
           try {
-            FormSealForm.mount();
+            FSEForm.mount();
           } catch (err) {
-            console.error("[formseal] Mount failed:", err);
+            console.error("[fse] Mount failed:", err);
           }
         }).catch(function (err) {
-          console.error("[formseal] sodium.ready failed:", err);
+          console.error("[fse] sodium.ready failed:", err);
         });
       } catch (err) {
-        console.error("[formseal] sodium is not available:", err);
+        console.error("[fse] sodium is not available:", err);
       }
       return;
     }
@@ -46,7 +49,7 @@
     fetch(url)
       .then(function (res) {
         if (!res.ok) {
-          console.error("[formseal] " + res.status + " loading " + url + ". Aborting.");
+          console.error("[fse] " + res.status + " loading " + url + ". Aborting.");
           return null;
         }
         return res.text();
@@ -59,7 +62,7 @@
         loadNext(index + 1);
       })
       .catch(function (err) {
-        console.error("[formseal] Failed to load " + url + ":", err);
+        console.error("[fse] Failed to load " + url + ":", err);
       });
   }
 

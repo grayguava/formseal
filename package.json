@@ -1,26 +1,29 @@
 {
-  "name": "@formseal/client",
+  "name": "@formseal/embed",
   "description": "Drop-in client-side encrypted contact form.",
   "license": "MIT",
   "bin": {
-    "@formseal/client": "./init.js"
+    "fse": "./cli/shim.js"
   },
   "files": [
     "src/",
-    "init.js"
+    "cli/"
   ],
   "engines": {
     "node": ">=18"
   },
   "keywords": [
     "formseal",
-    "encrypted",
+    "fsembed",
+    "fse",
+    "encryption",
+    "curve25519",
     "contact-form",
     "libsodium",
     "privacy"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/grayguava/formseal-client.git"
+    "url": "https://github.com/grayguava/formseal-embed.git"
   }
 }

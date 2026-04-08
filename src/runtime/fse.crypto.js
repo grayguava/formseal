@@ -1,6 +1,10 @@
-// _function/fs.crypto.js
+// fse.crypto.js
+// Pure crypto utilities. No DOM access. No config dependencies.
+// Depends on: window.sodium (libsodium-wrappers, must be ready)
 
-var FormSealCrypto = (function () {
+var FSECrypto = (function () {
+
+  // -- Encoding helpers --
 
   function bytesToBase64url(bytes) {
     return btoa(String.fromCharCode(...bytes))
@@ -17,19 +21,24 @@ var FormSealCrypto = (function () {
     return Uint8Array.from(binary, function (c) { return c.charCodeAt(0); });
   }
 
-  async function sealJSON(obj, recipientPublicKey) {
-    if (!recipientPublicKey) {
+  // -- Encryption --
+
+  // Seals a JS object as JSON to a recipient's x25519 public key.
+  // Returns the ciphertext as a base64url string.
+  // recipientPublicKey: base64url-encoded x25519 public key (32 bytes).
+  async function sealJSON(obj, publicKey) {
+    if (!publicKey) {
       throw new Error(
-        "[formseal/crypto] recipientPublicKey is not set in formseal.config.js."
+        "[fse/crypto] publicKey is not set in fse.config.js."
       );
     }
 
     await sodium.ready;
 
-    const pubKey = base64urlToBytes(recipientPublicKey);
+    const pubKey = base64urlToBytes(publicKey);
     if (pubKey.length !== 32) {
       throw new Error(
-        "[formseal/crypto] recipientPublicKey must decode to exactly 32 bytes."
+        "[fse/crypto] publicKey must decode to exactly 32 bytes."
       );
     }
 
@@ -38,6 +47,8 @@ var FormSealCrypto = (function () {
 
     return bytesToBase64url(ciphertext);
   }
+
+  // -- Public API --
 
   return {
     sealJSON,

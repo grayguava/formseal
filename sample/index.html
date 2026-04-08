@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact</title>
   <style>
-
     body        { font-family: sans-serif; max-width: 540px; margin: 2rem auto; padding: 0 1rem; }
     label       { display: block; font-weight: 600; margin-bottom: 0.25rem; }
     input, textarea {
@@ -17,23 +16,39 @@
     input[aria-invalid="true"], textarea[aria-invalid="true"] { border-color: #d00; }
     textarea    { resize: vertical; }
 
-    [data-fs-error] { display: block; color: #d00; font-size: 0.82rem; min-height: 1.1em; margin-bottom: 0.75rem; }
+    [data-fse-error] { display: block; color: #d00; font-size: 0.82rem; min-height: 1.1em; margin-bottom: 0.75rem; }
 
     button      { padding: 0.6rem 1.5rem; font-size: 1rem; background: #0057ff; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
     button:disabled { opacity: 0.55; cursor: not-allowed; }
 
     #contact-status { margin-top: 1rem; font-size: 0.95rem; }
-    #contact-status[data-fs-status="success"] { color: #1e6b3a; }
-    #contact-status[data-fs-status="error"]   { color: #a10000; }
+    #contact-status[data-fse-status="success"] { color: #1e6b3a; }
+    #contact-status[data-fse-status="error"]   { color: #a10000; }
   </style>
 </head>
 <body>
 
   <h1>Contact</h1>
 
+  <!--
+    FSE WIRING:
+
+    1. form   (#contact-form)   -- matches FSE.form
+    2. submit (#contact-submit) -- matches FSE.submit
+    3. status (#contact-status) -- matches FSE.status
+
+    Field [name] attributes must match keys in FSE.fields.
+
+    [data-fse-error="fieldname"] elements are optional. FSE writes validation
+    errors into them if present.
+
+    The honeypot input (name="_hp") is for spam protection.
+    Hide it with CSS -- do not use display:none or visibility:hidden.
+  -->
 
   <form id="contact-form" novalidate autocomplete="on">
 
+    <!-- Honeypot -->
     <input
       type="text"
       name="_hp"
@@ -46,19 +61,19 @@
     <div>
       <label for="field-name">Your name</label>
       <input type="text" id="field-name" name="name" placeholder="Jane Smith" autocomplete="name">
-      <span data-fs-error="name"></span>
+      <span data-fse-error="name"></span>
     </div>
 
     <div>
       <label for="field-email">Email address</label>
       <input type="email" id="field-email" name="email" placeholder="you@example.com" autocomplete="email">
-      <span data-fs-error="email"></span>
+      <span data-fse-error="email"></span>
     </div>
 
     <div>
       <label for="field-message">Message</label>
       <textarea id="field-message" name="message" rows="5" placeholder="Context-rich messages are appreciated."></textarea>
-      <span data-fs-error="message"></span>
+      <span data-fse-error="message"></span>
     </div>
 
     <button type="submit" id="contact-submit">Send message</button>
@@ -67,9 +82,8 @@
 
   <div id="contact-status" role="status" aria-live="polite"></div>
 
-
   <script>
-    window.formsealCallbacks = {
+    window.fseCallbacks = {
       onSuccess: function (response) {
         console.log("Submitted:", response);
       },
@@ -79,7 +93,7 @@
     };
   </script>
 
-  <script src="/src/globals.js"></script>
+  <script src="/formseal-embed/globals.js"></script>
 
 </body>
 </html>

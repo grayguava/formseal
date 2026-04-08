@@ -1,139 +1,112 @@
-# FormSeal
+<p align="center">
+  <img src="fse-ascii.png" alt="formseal">
+</p>
 
-FormSeal is a **server-blind, browser-native encrypted form poster**.
+<p align="center">
+  <img src="https://img.shields.io/badge/encryption-X25519-10b981?style=flat-square&labelColor=1e293b&borderRadius=6px">
+  <img src="https://img.shields.io/badge/decryption-offline%20only-f59e0b?style=flat-square&labelColor=1e293b&borderRadius=6px">
+  <img src="https://img.shields.io/badge/backend-blind-6366f1?style=flat-square&labelColor=1e293b&borderRadius=6px">
+  <img src="https://img.shields.io/npm/v/@formseal/embed?style=flat-square&label=npm&labelColor=fff&color=cb0000&borderRadius=6px">
+  <img src="https://img.shields.io/badge/license-MIT-fc8181?style=flat-square&labelColor=1e293b&borderRadius=6px">
+</p>
 
-Form submissions are encrypted **in the browser** using X25519 sealed boxes before being sent to any POST endpoint. The backend receives and stores **opaque ciphertext only**. Decryption is operator-controlled and happens offline.
+<p align="center">
+  A server-blind, browser-native encrypted form poster.
+</p>
 
-FormSeal is **not a hosted service, dashboard, or SaaS product.**  
-It is a drop-in client-side utility.
+---
+
+Form submissions are encrypted in the browser using X25519 sealed boxes before reaching any endpoint. The backend receives and stores opaque ciphertext only. Decryption is operator-controlled and happens offline, with your private key.
+
+formseal is not a hosted service, dashboard, or SaaS product. It is a drop-in client-side utility.
+
+---
+
+## Installation
+
+```bash
+npm install -g @formseal/embed
+fse init
+```
+
+Scaffolds `./formseal-embed/` into your project, then:
+
+```bash
+fse configure quick
+```
+
+You'll be prompted for your POST endpoint and public key. See [Getting started](./docs/getting-started.md) for key generation.
+
+> If you prefer not to install globally, `npx @formseal/embed init` works — but you'll need to edit `fse.config.js` manually instead of using the CLI.
 
 ---
 
 ## Security guarantee
 
-> **If the POST endpoint is fully compromised, seized, or maliciously operated, previously submitted form data remains confidential.**
+> If the POST endpoint is fully compromised, seized, or maliciously operated, previously submitted form data remains confidential.
 
-This guarantee holds because:
-
-- Encryption happens client-side, in the browser
-- The backend stores ciphertext only
-- Decryption keys never exist in the backend environment
-
-A backend compromise yields no recoverable plaintext.
+Encryption happens in the browser. The backend stores ciphertext only. Decryption keys never exist in the backend environment. A backend compromise yields no recoverable plaintext.
 
 ---
 
 ## Threat model
 
-FormSeal is designed for environments where:
+formseal is for environments where:
 
 - The hosting provider or backend may be compromised
 - The backend must be treated as hostile
 - Data seizure is a realistic concern
 - Retroactive disclosure must be prevented
 
-FormSeal prioritizes **backward confidentiality** — protecting already-submitted data — over convenience or real-time administration.
+The priority is **backward confidentiality** — protecting already-submitted data — not convenience or real-time administration.
 
 ---
 
 ## How it works
 
-On submit, FormSeal:
+On submit, formseal:
 
 1. Collects field values from your form by `name` attribute
-2. Validates them against your schema rules
+2. Validates them against your field rules
 3. Seals the payload with `crypto_box_seal` (Curve25519 + XSalsa20-Poly1305)
-4. POSTs `{ ciphertext: "<base64url>" }` to your configured endpoint
+4. POSTs raw ciphertext to your configured endpoint
 
 Your endpoint stores the ciphertext. Only the holder of the private key can decrypt it.
 
 ---
 
-## Installation
-
-**npx (recommended):**
-
-```bash
-npx @formseal/client
-```
-
-Scaffolds `./formseal/` into your project. Nothing else is left behind.
-
-**Manual:**
-
-Download `formseal_client-vX.Y.Z.zip` from the [latest release](https://github.com/grayguava/formseal-client/releases/latest), extract, and drop the `formseal/` folder into your project.
-
-Verify integrity with the SHA256 hashes in the release notes.
-
----
-
-## Setup
-
-### 1. Configure
-
-Edit `formseal/config/formseal.config.js`:
-
-- Set `endpoint` to your POST API URL
-- Set `recipientPublicKey` to your base64url public key
-- Adjust `submitStates` and `onSuccess` / `onError` behaviour
-
-Edit `formseal/config/fields.schema.js`:
-
-- Set `formSelector`, `submitSelector`, `statusSelector`
-- Define your fields with validation rules
-
-### 2. Wire up your HTML
+## Wire up your HTML
 
 ```html
-<!-- Your form — write it however you want -->
-<form id="contact-form" novalidate>
+<form id="contact-form">
 
-  <!-- Honeypot (required, hide off-screen with CSS) -->
+  <!-- honeypot — hide off-screen with CSS -->
   <input type="text" name="_hp" tabindex="-1" autocomplete="off"
     style="position:absolute;left:-9999px;opacity:0;height:0;">
 
-  <!-- Fields — [name] must match fields.schema.js -->
   <input type="text"  name="name">
-  <span data-fs-error="name"></span>
+  <span data-fse-error="name"></span>
 
   <input type="email" name="email">
-  <span data-fs-error="email"></span>
+  <span data-fse-error="email"></span>
 
   <textarea name="message"></textarea>
-  <span data-fs-error="message"></span>
+  <span data-fse-error="message"></span>
 
   <button type="submit" id="contact-submit">Send message</button>
 </form>
 
-<!-- FormSeal writes status messages here -->
 <div id="contact-status"></div>
 
-<!-- Optional: callbacks -->
 <script>
-  window.formsealCallbacks = {
-    onSuccess: function(response) { },
-    onError:   function(error)    { },
+  window.fseCallbacks = {
+    onSuccess: function(response) {},
+    onError:   function(error)    {},
   };
 </script>
 
-<!-- Single script tag -->
-<script src="/formseal/globals.js"></script>
+<script src="/formseal-embed/globals.js"></script>
 ```
-
-See [`sample/index.html`](./sample/index.html) for a complete working example.
-
----
-
-## CSS hooks
-
-FormSeal sets these attributes. Style them however you want:
-
-|Selector|When|
-|---|---|
-|`[data-fs-error="name"]`|Populated with validation error|
-|`[aria-invalid="true"]`|Set on invalid inputs|
-|`[data-fs-status="success"]`|Set on status element on success|
-|`[data-fs-status="error"]`|Set on status element on error|
 
 ---
 
@@ -141,13 +114,11 @@ FormSeal sets these attributes. Style them however you want:
 
 ```json
 {
-  "_fs": {
-    "version": "fs.v2.1",
-    "origin": "contact-form",
-    "id": "<uuid>",
-    "submitted_at": "<iso8601>",
-    "client_tz": "<tz>"
-  },
+  "version": "fse.v1.0",
+  "origin": "contact-form",
+  "id": "<uuid>",
+  "submitted_at": "<iso8601>",
+  "client_tz": "Europe/London",
   "data": {
     "name": "...",
     "email": "...",
@@ -156,46 +127,43 @@ FormSeal sets these attributes. Style them however you want:
 }
 ```
 
-The entire object is JSON-serialised and sealed with `crypto_box_seal`.  
-Your endpoint receives `{ ciphertext: "<base64url>" }`.
+The entire object is sealed with `crypto_box_seal`. Your endpoint receives raw ciphertext as the request body.
 
 ---
 
-## Backend compromise impact
+## CSS hooks
 
-If the POST endpoint or storage layer is compromised, an attacker can:
-
-- Access encrypted submission blobs
-- Observe submission timing and size
-- Modify backend code affecting future submissions
-
-They **cannot**:
-
-- Decrypt existing submissions without the private key
-- Recover plaintext from stored ciphertext
-- Retroactively compromise already-encrypted data
+| Selector | When |
+|---|---|
+| `[data-fse-error="field"]` | Populated with a validation error |
+| `[aria-invalid="true"]` | Set on invalid inputs |
+| `[data-fse-status="success"]` | Set on status element on success |
+| `[data-fse-status="error"]` | Set on status element on error |
 
 ---
 
-## What FormSeal does not do
+## What formseal does not do
 
 - No admin dashboard or inbox UI
-- No server-side decryption
 - No hosted service
 - No bundler or build step required
-- No npm dependencies
+- No npm dependencies at runtime
 
-These omissions are intentional.
+These are intentional.
 
 ---
 
-## Administrative tooling
+## Documentation
 
-Decryption, export, and operator workflows are out of scope for this repository.
-
-Operator tooling is maintained separately:
-
-**FormSeal Sync** — https://github.com/grayguava/formseal-sync
+- [Getting started](./docs/getting-started.md)
+- [Concepts → How it works](./docs/concepts/how-it-works.md)
+- [Concepts → Security](./docs/concepts/security.md)
+- [Integration → HTML](./docs/integration/html.md)
+- [Integration → Fields](./docs/integration/fields.md)
+- [Integration → JavaScript](./docs/integration/javascript.md)
+- [Deployment → Endpoint](./docs/deployment/endpoint.md)
+- [Deployment → Decryption](./docs/deployment/decryption.md)
+- [Deployment → Versioning](./docs/deployment/versioning.md)
 
 ---
 

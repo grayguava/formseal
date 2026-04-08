@@ -1,4 +1,4 @@
-name: Release
+name: release
 
 on:
   workflow_dispatch:
@@ -89,6 +89,6 @@ jobs:
             ${{ steps.assets.outputs.basename }}.zip
             ${{ steps.assets.outputs.basename }}.tar.gz
           body: |
-            sha256:
+            SHA-256:
             `${{ steps.assets.outputs.basename }}.zip`  ${{ steps.assets.outputs.sha_zip }}
             `${{ steps.assets.outputs.basename }}.tar.gz`  ${{ steps.assets.outputs.sha_tar }}
