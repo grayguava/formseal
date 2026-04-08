@@ -57,7 +57,7 @@ jobs:
         id: assets
         run: |
           VERSION=${{ steps.version.outputs.version }}
-          BASENAME="formseal_client-v${VERSION}"
+          BASENAME="formseal_embed-v${VERSION}"
 
           # Stage src/ as formseal/ internally
           mkdir -p staging/formseal
