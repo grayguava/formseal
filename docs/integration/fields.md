@@ -1,6 +1,6 @@
 # Fields
 
-Fields define what to collect and how to validate it. They live in `fse.config.js` and must match the `name` attributes on your form inputs.
+Fields define what to collect and how to validate it. They live in `fields.jsonl` and must match the `name` attributes on your form inputs.
 
 ---
 
