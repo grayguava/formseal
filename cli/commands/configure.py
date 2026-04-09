@@ -15,6 +15,7 @@ from pathlib import Path
 from ui.output import br, rule, row, code, fail, C, G, Y, S, W, R, D
 
 CONFIG_PATH = Path.cwd() / "formseal-embed" / "config" / "fse.config.js"
+FIELDS_PATH = Path.cwd() / "formseal-embed" / "config" / "fields.jsonl"
 
 MARKERS = {
     "endpoint":   "endpoint:",
@@ -60,42 +61,30 @@ def _normalize_endpoint(url: str) -> str:
     return url
 
 
-def _load_config() -> dict:
-    if not CONFIG_PATH.exists():
+def _load_fields_jsonl() -> dict:
+    if not FIELDS_PATH.exists():
         return {}
-    content = CONFIG_PATH.read_text(encoding="utf-8")
-    match = re.search(r'var FSE = (\{[\s\S]*?\});', content)
-    if not match:
-        return {}
-    try:
-        return json.loads(match.group(1))
-    except json.JSONDecodeError:
-        return {}
-
-
-def _save_config(cfg: dict):
-    lines = CONFIG_PATH.read_text(encoding="utf-8").splitlines(keepends=True)
-    out = []
+    lines = FIELDS_PATH.read_text(encoding="utf-8").strip().split('\n')
+    fields = {}
     for line in lines:
-        if line.strip().startswith("fields:") and "{" in line:
-            out.append(line)
-            break
-        out.append(line)
-    else:
-        out.append(f"  fields: {json.dumps(cfg.get('fields', {}), indent=4)},\n")
-        CONFIG_PATH.write_text("".join(out), encoding="utf-8")
-        return
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            obj = json.loads(line)
+            key = list(obj.keys())[0]
+            fields[key] = obj[key]
+        except:
+            pass
+    return fields
 
-    indent = "  "
-    fields_json = json.dumps(cfg.get("fields", {}), indent=4)
-    fields_json = "\n".join(indent + line for line in fields_json.splitlines())
-    out.append(fields_json + ",\n")
 
-    while lines and not lines[-1].strip().startswith("}"):
-        lines.pop()
-    out.extend(lines)
-
-    CONFIG_PATH.write_text("".join(out), encoding="utf-8")
+def _save_fields_jsonl(fields: dict):
+    lines = []
+    for name, opts in fields.items():
+        line = json.dumps({name: opts})
+        lines.append(line)
+    FIELDS_PATH.write_text('\n'.join(lines) + '\n', encoding="utf-8")
 
 
 def run(subcommand: str, args: list):
@@ -172,13 +161,10 @@ def _field_add(args: list):
         fail("Usage: fse configure field add <name> [required:true] [maxLength:n] [type:email]")
 
     name = args[0]
-    cfg = _load_config()
-    fields = cfg.get("fields", {})
+    fields = _load_fields_jsonl()
 
-    if name in fields:
-        fail(f"Field {W}{name}{R} already exists.")
-
-    field = {}
+    is_update = name in fields
+    field = fields.get(name, {"enabled": True})
     for opt in args[1:]:
         if ":" in opt:
             k, v = opt.split(":", 1)
@@ -195,14 +181,13 @@ def _field_add(args: list):
                 field["type"] = v
 
     fields[name] = field
-    cfg["fields"] = fields
-    _save_config(cfg)
+    _save_fields_jsonl(fields)
 
     br()
-    print(f"  {G}Added field:{R} {name}")
-    if field:
-        for k, v in field.items():
-            row("", k, str(v))
+    action = "Updated" if is_update else "Added"
+    print(f"  {G}{action} field:{R} {name}")
+    for k, v in field.items():
+        row("", k, str(v))
 
 
 def _field_remove(args: list):
@@ -210,15 +195,13 @@ def _field_remove(args: list):
         fail("Usage: fse configure field remove <name>")
 
     name = args[0]
-    cfg = _load_config()
-    fields = cfg.get("fields", {})
+    fields = _load_fields_jsonl()
 
     if name not in fields:
         fail(f"Field {W}{name}{R} not found.")
 
     del fields[name]
-    cfg["fields"] = fields
-    _save_config(cfg)
+    _save_fields_jsonl(fields)
 
     br()
     print(f"  {G}Removed field:{R} {name}")
@@ -232,15 +215,13 @@ def _field_required(args: list):
     if value not in ("true", "false"):
         fail("Use true or false")
 
-    cfg = _load_config()
-    fields = cfg.get("fields", {})
+    fields = _load_fields_jsonl()
 
     if name not in fields:
         fail(f"Field {W}{name}{R} not found.")
 
     fields[name]["required"] = value == "true"
-    cfg["fields"] = fields
-    _save_config(cfg)
+    _save_fields_jsonl(fields)
 
     br()
     row(">", f"{name}.required", value)
@@ -256,15 +237,13 @@ def _field_maxlength(args: list):
     except ValueError:
         fail(f"Invalid number: {value}")
 
-    cfg = _load_config()
-    fields = cfg.get("fields", {})
+    fields = _load_fields_jsonl()
 
     if name not in fields:
         fail(f"Field {W}{name}{R} not found.")
 
     fields[name]["maxLength"] = maxlen
-    cfg["fields"] = fields
-    _save_config(cfg)
+    _save_fields_jsonl(fields)
 
     br()
     row(">", f"{name}.maxLength", str(maxlen))
@@ -278,15 +257,13 @@ def _field_type(args: list):
     if value not in ("email", "tel", "text"):
         fail(f"Invalid type: {value}. Use email, tel, or text.")
 
-    cfg = _load_config()
-    fields = cfg.get("fields", {})
+    fields = _load_fields_jsonl()
 
     if name not in fields:
         fail(f"Field {W}{name}{R} not found.")
 
     fields[name]["type"] = value
-    cfg["fields"] = fields
-    _save_config(cfg)
+    _save_fields_jsonl(fields)
 
     br()
     row(">", f"{name}.type", value)

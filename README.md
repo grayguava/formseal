@@ -27,20 +27,40 @@ formseal is not a hosted service, dashboard, or SaaS product. It is a drop-in cl
 
 ## Installation
 
+**Via npm (recommended)**
+
 ```bash
 npm install -g @formseal/embed
 fse init
 ```
 
-Scaffolds `./formseal-embed/` into your project, then:
+**Via GitHub release (zero toolchain)**
+
+1. Download the latest [release artifact](https://github.com/grayguava/formseal-embed/releases)
+2. Unzip → drop `formseal/` into your project
+3. Edit `fse.config.js` manually
+
+> Both paths are identical. The CLI is a scaffolding tool that lives globally — your project only gets `./formseal-embed/`, which is static files with zero dependencies. No `node_modules`, no `package.json`, no build step. Works fully offline after setup. The CLI can be uninstalled anytime.
+
+---
+
+## 60-second demo
+
+```bash
+npm install -g @formseal/embed && fse init && open sample/index.html
+```
+
+Or: download a release → unzip → open `sample/index.html`.
+
+---
+
+## Configure
 
 ```bash
 fse configure quick
 ```
 
 You'll be prompted for your POST endpoint and public key. See [Getting started](./docs/getting-started.md) for key generation.
-
-> If you prefer not to install globally, `npx @formseal/embed init` works — but you'll need to edit `fse.config.js` manually instead of using the CLI.
 
 ---
 
@@ -80,6 +100,8 @@ Your endpoint stores the ciphertext. Only the holder of the private key can decr
 
 ## Wire up your HTML
 
+> After `fse init`, files live in `./formseal-embed/`. Reference them via your server's static path (e.g. `/formseal-embed/globals.js`).
+
 ```html
 <form id="contact-form">
 
@@ -103,13 +125,15 @@ Your endpoint stores the ciphertext. Only the holder of the private key can decr
 
 <script>
   window.fseCallbacks = {
-    onSuccess: function(response) {},
-    onError:   function(error)    {},
+    onSuccess: () => document.getElementById('contact-status').textContent = 'Sent securely.',
+    onError:   (err) => console.error('formseal error:', err),
   };
 </script>
 
 <script src="/formseal-embed/globals.js"></script>
 ```
+
+> Works fully offline after setup. No CDN, no runtime fetches, no external dependencies.
 
 ---
 
@@ -121,7 +145,6 @@ Your endpoint stores the ciphertext. Only the holder of the private key can decr
   "origin": "contact-form",
   "id": "<uuid>",
   "submitted_at": "<iso8601>",
-  "client_tz": "Europe/London",
   "data": {
     "name": "...",
     "email": "...",
@@ -131,6 +154,8 @@ Your endpoint stores the ciphertext. Only the holder of the private key can decr
 ```
 
 The entire object is sealed with `crypto_box_seal`. Your endpoint receives raw ciphertext as the request body.
+
+> No IP, no timezone, no fingerprints — just the data you explicitly collect.
 
 ---
 

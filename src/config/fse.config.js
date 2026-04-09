@@ -3,7 +3,7 @@
 //
 // Edit this file or use the CLI:
 //   fse configure endpoint <url>
-//   fse configure key <base64url>
+//   fse configure publicKey <base64url>
 //   fse configure field add <name> [options]
 //   fse configure field remove <name>
 //   fse configure field required <name> <true|false>
@@ -12,11 +12,11 @@
 var FSE = {
 
   // -- Endpoint --
-  // POST target. Receives: { ciphertext: "<base64url>" }
+  // POST target. Receives raw ciphertext.
   endpoint: "https://your-api.example.com/submit",
 
   // -- Origin --
-  // Identifier for this form deployment. Useful when you have multiple forms.
+  // Identifier for this form deployment.
   origin: "contact-form",
 
   // -- Encryption --
@@ -48,22 +48,7 @@ var FSE = {
   },
 
   // -- Fields --
-  // Key = field name (matches [name] attribute in HTML)
-  // Value = validation rules
-  fields: {
-    name: {
-      required:  true,
-      maxLength: 100,
-    },
-    email: {
-      type:      "email",
-      required:  true,
-      maxLength: 200,
-    },
-    message: {
-      required:  true,
-      maxLength: 1000,
-    },
-  },
+  // Loaded from fields.jsonl at runtime
+  fields: FSE_FIELDS,
 
 };

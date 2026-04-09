@@ -59,17 +59,17 @@ jobs:
           VERSION=${{ steps.version.outputs.version }}
           BASENAME="formseal_embed-v${VERSION}"
 
-          # Stage src/ as formseal/ internally
-          mkdir -p staging/formseal
-          cp -r src/. staging/formseal/
+          # Stage src/ as formseal-embed/
+          mkdir -p staging/formseal-embed
+          cp -r src/. staging/formseal-embed/
 
           # zip
           cd staging
-          zip -r "../${BASENAME}.zip" formseal/
+          zip -r "../${BASENAME}.zip" formseal-embed/
           cd ..
 
           # tarball
-          tar -czf "${BASENAME}.tar.gz" -C staging formseal/
+          tar -czf "${BASENAME}.tar.gz" -C staging formseal-embed/
 
           # SHA-256 of both
           SHA_ZIP=$(sha256sum "${BASENAME}.zip"    | awk '{print $1}')
