@@ -11,6 +11,7 @@ CONFIG_PATH = Path.cwd() / "formseal-embed" / "config" / "fse.config.js"
 MARKERS = {
     "endpoint": "endpoint:",
     "key": "publicKey:",
+    "origin": "origin:",
 }
 
 
@@ -58,9 +59,11 @@ def run(subcommand: str, args: list):
         _update_endpoint(args)
     elif subcommand in ("key", "k"):
         _update_key(args)
+    elif subcommand in ("origin", "o"):
+        _update_origin(args)
     else:
         fail(f"Unknown update: {subcommand}\n" +
-             f"           Use {W}fse update endpoint{R} or {W}fse update key{R}")
+             f"           Use {W}fse update endpoint{R}, {W}fse update key{R}, or {W}fse update origin{R}")
 
 
 def _update_endpoint(args: list):
@@ -91,3 +94,18 @@ def _update_key(args: list):
         row(">", "key", key[:24] + "..." if len(key) > 24 else key)
     else:
         fail("Could not update key.")
+
+
+def _update_origin(args: list):
+    if not args:
+        fail("Usage: fse update origin <name>")
+
+    origin = args[0]
+
+    if _patch("origin", origin):
+        br()
+        print(f"  {S}*{R} {G}Updated!{R}")
+        print(G + " " + "\u2500" * 52 + R)
+        row(">", "origin", origin)
+    else:
+        fail("Could not update origin.")

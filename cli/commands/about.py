@@ -1,24 +1,21 @@
 # commands/about.py
-# About command - shows logo and info
+# About command - shows project info
 
-from ui.output import br, link, O, R, W, D
-from logo import LOGO
+from ui.output import br, link, C, G, W, D, R
 
 
 def run():
     br()
-    lines = LOGO.strip().split("\n")
-    for i, line in enumerate(lines):
-        if i == 0:
-            line = " " + line 
-        print(f"{O}{line}{R}")
-    br()
-    print(f"  {W}Client-side encrypted contact forms.{R}")
+    print(f"{C}┌─{R} {W}formseal-embed{R}")
+    print(f"{C}│{R} {W}Client-side encrypted contact forms{R}")
+    print(f"{C}└────────────────────────────────────{R}")
     br()
     print(f"  {D}Author:{R} grayguava")
     print(f"  {D}License:{R} MIT")
     br()
-    print(f"  {D}GitHub links:")
+    print(f"  {D}Project:{R}")
     link("https://github.com/grayguava/formseal-embed")
+    br()
+    print(f"  {D}Documentation:{R}")
     link("https://github.com/grayguava/formseal-embed/docs")
     br()

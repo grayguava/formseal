@@ -20,7 +20,6 @@ except:
 sys.path.insert(0, os.path.dirname(__file__))
 
 from ui.output import br, rule, cmd_line, link, fail, badge, C, G, Y, M, W, D, R, BOLD
-from logo import LOGO
 
 from commands import init as cmd_init
 from commands import configure as cmd_configure
@@ -64,10 +63,21 @@ def main():
             sub = args[1] if len(args) > 1 else None
             cmd_configure.run(sub, args[2:])
 
+        case "-qc":
+            cmd_configure.run("quick", [])
+
+        case "field":
+            sub = args[1] if len(args) > 1 else None
+            cmd_configure.run("-f", args[2:])
+
         case "-f":
             cmd_configure.run("-f", args[1:])
 
         case "update":
+            sub = args[1] if len(args) > 1 else None
+            cmd_update.run(sub, args[2:])
+
+        case "-u":
             sub = args[1] if len(args) > 1 else None
             cmd_update.run(sub, args[2:])
 
@@ -79,6 +89,9 @@ def main():
 
         case "--help" | "-h":
             cmd_help.run()
+
+        case "--aliases":
+            cmd_help.run_aliases()
 
         case "--about":
             cmd_about.run()

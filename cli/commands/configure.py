@@ -136,17 +136,10 @@ def _run_field(args: list):
 
     if action in ("add", "a"):
         _field_add(args[1:])
-    elif action in ("remove", "rm", "r", "del", "delete"):
+    elif action in ("rm", "r", "remove", "delete"):
         _field_remove(args[1:])
-    elif action in ("required", "req"):
-        _field_required(args[1:])
-    elif action in ("maxlength", "maxLen"):
-        _field_maxlength(args[1:])
-    elif action in ("type", "t"):
-        _field_type(args[1:])
     else:
-        fail(f"Unknown field action: {action}\n" +
-             f"           Use add, rm, required, maxLen, or type")
+        _field_modify(args)
 
 
 def _field_add(args: list):
@@ -205,9 +198,9 @@ def _field_remove(args: list):
     print(f"  {G}Removed field:{R} {name}")
 
 
-def _field_required(args: list):
+def _field_modify(args: list):
     if len(args) < 2:
-        fail("Usage: fse configure -f required <name> required:true")
+        fail("Usage: fse -f <name> required:true maxLen:100 type:email")
 
     name = args[0]
     fields = _load_fields_jsonl()
@@ -215,77 +208,44 @@ def _field_required(args: list):
     if name not in fields:
         fail(f"Field {W}{name}{R} not found.")
 
-    found = False
+    updated = []
     for opt in args[1:]:
         if ":" in opt:
             k, v = opt.split(":", 1)
             if k == "required":
                 fields[name]["required"] = v.lower() == "true"
-                found = True
-    
-    if not found:
-        fail("Use required:true or required:false")
-
-    _save_fields_jsonl(fields)
-
-    br()
-    row(">", f"{name}.required", str(fields[name]["required"]))
-
-
-def _field_maxlength(args: list):
-    if len(args) < 2:
-        fail("Usage: fse configure -f maxLen <name> maxLen:100")
-
-    name = args[0]
-    fields = _load_fields_jsonl()
-
-    if name not in fields:
-        fail(f"Field {W}{name}{R} not found.")
-
-    found = False
-    for opt in args[1:]:
-        if ":" in opt:
-            k, v = opt.split(":", 1)
-            if k in ("maxLen", "maxLength"):
+                updated.append("required")
+            elif k in ("maxLen", "maxLength"):
                 try:
                     fields[name]["maxLength"] = int(v)
-                    found = True
+                    updated.append("maxLength")
                 except ValueError:
                     fail(f"Invalid maxLen: {v}")
-    
-    if not found:
-        fail("Use maxLen:number")
-
-    _save_fields_jsonl(fields)
-
-    br()
-    row(">", f"{name}.maxLength", str(fields[name]["maxLength"]))
-
-
-def _field_type(args: list):
-    if len(args) < 2:
-        fail("Usage: fse configure -f type <name> type:email")
-
-    name = args[0]
-    fields = _load_fields_jsonl()
-
-    if name not in fields:
-        fail(f"Field {W}{name}{R} not found.")
-
-    found = False
-    for opt in args[1:]:
-        if ":" in opt:
-            k, v = opt.split(":", 1)
-            if k in ("type", "t"):
+            elif k in ("type", "t"):
                 if v not in ("email", "tel", "text"):
                     fail(f"Invalid type: {v}. Use email, tel, or text.")
                 fields[name]["type"] = v
-                found = True
-    
-    if not found:
-        fail("Use type:email, type:tel, or type:text")
+                updated.append("type")
+
+    if not updated:
+        fail("No valid flags. Use required:true/false, maxLen:number, or type:email/tel/text")
 
     _save_fields_jsonl(fields)
 
     br()
-    row(">", f"{name}.type", fields[name]["type"])
+    print(f"  {G}Updated field:{R} {name}")
+    print(G + " " + "\u2500" * 52 + R)
+    for k, v in fields[name].items():
+        row("", k, str(v))
+
+
+def _field_required(args: list):
+    pass  # deprecated
+
+
+def _field_maxlength(args: list):
+    pass  # deprecated
+
+
+def _field_type(args: list):
+    pass  # deprecated

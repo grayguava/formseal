@@ -10,26 +10,22 @@ def run():
     print(G + " " + "\u2500" * 52 + R)
     br()
 
-    # Scaffold
-    print(f"  {G}>>{R} {Y}Scaffold{R}")
+    # General
+    print(f"  {G}>>{R} {Y}General{R}")
     print(G + " " + "\u2500" * 52 + R)
-    cmd_line("fse init", "scaffold ./formseal-embed/ into current directory")
+    cmd_line("fse init", "scaffold project")
+    cmd_line("fse --help", "show this help")
+    cmd_line("fse --version", "check version & updates")
+    cmd_line("fse --about", "show logo and info")
+    cmd_line("fse --aliases", "show shortand aliases")
     br()
 
     # Configure
     print(f"  {G}>>{R} {Y}Configure{R}")
     print(G + " " + "\u2500" * 52 + R)
-    cmd_line("fse configure quick", "set endpoint and public key")
-    br()
-
-    # Fields
-    print(f"  {G}>>{R} {Y}Fields{R}")
-    print(G + " " + "\u2500" * 52 + R)
-    cmd_line("fse -f add <name> type:email", "add field (type required)")
-    cmd_line("fse -f rm <name>", "remove field")
-    cmd_line("fse -f required <name> required:true", "set field required")
-    cmd_line("fse -f maxLen <name> maxLen:100", "set field max length")
-    cmd_line("fse -f type <name> type:email", "set field type")
+    cmd_line("fse configure quick", "set endpoint + key")
+    cmd_line("fse field add <name> type:email", "add field")
+    cmd_line("fse field remove <name>", "remove field")
     br()
 
     # Update
@@ -37,7 +33,7 @@ def run():
     print(G + " " + "\u2500" * 52 + R)
     cmd_line("fse update endpoint <url>", "update POST endpoint")
     cmd_line("fse update key <base64url>", "update X25519 public key")
-    cmd_line("fse --version", "check version and updates")
+    cmd_line("fse update origin <name>", "update form origin")
     br()
 
     # Coming soon
@@ -50,4 +46,18 @@ def run():
     print(f"  {G}>>{R} {Y}Docs{R}")
     print(G + " " + "\u2500" * 52 + R)
     link("https://github.com/grayguava/formseal-embed/docs")
+    br()
+
+
+def run_aliases():
+    br()
+    print(f"{C} \u250c\u2500 {R}{W}formseal-embed{R}    {G}shorthand aliases{R}")
+    print(G + " " + "\u2500" * 52 + R)
+    br()
+
+    print(f"  {W}Short{R}     {G}Canonical{R}")
+    print(G + " " + "\u2500" * 52 + R)
+    print(f"  {W}-qc{R}       {G}configure quick{R}")
+    print(f"  {W}-f{R}        {G}field{R}")
+    print(f"  {W}-u{R}        {G}update{R}")
     br()

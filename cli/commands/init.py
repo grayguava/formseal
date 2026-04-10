@@ -22,7 +22,7 @@ def _prompt(label: str, hint: str) -> str:
 
 def _confirm(prompt: str) -> bool:
     try:
-        return input(f"  {W}{prompt}{R} ").strip().lower() == "y"
+        return input(f"  {D}{prompt}{R} {G}(y/n){R}: ").strip().lower() == "y"
     except (KeyboardInterrupt, EOFError):
         br()
         return False
