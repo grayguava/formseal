@@ -46,6 +46,14 @@ jobs:
           echo "tag=${NEXT}" >> $GITHUB_OUTPUT
           echo "version=${MAJOR}.${MINOR}.${PATCH}" >> $GITHUB_OUTPUT
 
+      - name: Check tag doesn't already exist
+        run: |
+          TAG=${{ steps.version.outputs.tag }}
+          if git tag | grep -q "^${TAG}$"; then
+            echo "Tag ${TAG} already exists. Aborting."
+            exit 1
+          fi
+
       - name: Tag release
         run: |
           git config user.name  "github-actions[bot]"
@@ -59,19 +67,15 @@ jobs:
           VERSION=${{ steps.version.outputs.version }}
           BASENAME="formseal_embed-v${VERSION}"
 
-          # Stage src/ as formseal-embed/
           mkdir -p staging/formseal-embed
           cp -r src/. staging/formseal-embed/
 
-          # zip
           cd staging
           zip -r "../${BASENAME}.zip" formseal-embed/
           cd ..
 
-          # tarball
           tar -czf "${BASENAME}.tar.gz" -C staging formseal-embed/
 
-          # SHA-256 of both
           SHA_ZIP=$(sha256sum "${BASENAME}.zip"    | awk '{print $1}')
           SHA_TAR=$(sha256sum "${BASENAME}.tar.gz" | awk '{print $1}')
 
@@ -92,3 +96,10 @@ jobs:
             SHA-256:
             `${{ steps.assets.outputs.basename }}.zip`  ${{ steps.assets.outputs.sha_zip }}
             `${{ steps.assets.outputs.basename }}.tar.gz`  ${{ steps.assets.outputs.sha_tar }}
+
+      - name: Wait 30s then trigger npm publish
+        run: |
+          sleep 30
+          gh workflow run npm-publish.yml
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
