@@ -8,7 +8,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      actions: write
 
     steps:
       - name: Checkout
@@ -58,7 +57,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Wait then trigger socket badge update
+      - name: Wait 30s then trigger socket badge update
         run: |
           sleep 30
           gh workflow run update-socket-badge.yml

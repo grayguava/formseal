@@ -48,7 +48,15 @@ fse configure quick
 
 You'll be prompted for your endpoint URL and public key.
 
-### 4. Add to your page
+### 4. Verify
+
+```bash
+fse doctor
+```
+
+Validates your config, endpoint, encryption keys, and fields. Run this anytime something's not working.
+
+### 5. Add to your page
 
 ```html
 <script src="/formseal-embed/globals.js"></script>

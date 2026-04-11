@@ -92,8 +92,13 @@ def run(subcommand: str, args: list):
 
     if subcommand in ("quick", "q"):
         _run_quick()
-    elif subcommand in ("field", "fields", "f", "-f"):
+    elif subcommand in ("field", "fields"):
         _run_field(args)
+    elif subcommand in ("f", "-f"):
+        if args and args[0] in ("add", "rm", "remove", "a", "r"):
+            _run_field(args)
+        else:
+            _run_field(["modify"] + args)
     else:
         fail(f"Unknown subcommand: {subcommand}\n" +
              f"           Use {W}fse configure quick{R} or {W}fse configure field{R}")
@@ -237,15 +242,3 @@ def _field_modify(args: list):
     print(G + " " + "\u2500" * 52 + R)
     for k, v in fields[name].items():
         row("", k, str(v))
-
-
-def _field_required(args: list):
-    pass  # deprecated
-
-
-def _field_maxlength(args: list):
-    pass  # deprecated
-
-
-def _field_type(args: list):
-    pass  # deprecated

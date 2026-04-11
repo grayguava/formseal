@@ -6,9 +6,8 @@ from ui.output import br, link, C, G, W, D, R
 
 def run():
     br()
-    print(f"{C}┌─{R} {W}formseal-embed{R}")
-    print(f"{C}│{R} {W}Client-side encrypted contact forms{R}")
-    print(f"{C}└────────────────────────────────────{R}")
+    print(f" {C}┌─{R} {W}formseal-embed{R}")
+    print(f" {C}───────────────────────────────────────────────────{R}")
     br()
     print(f"  {D}Author:{R} grayguava")
     print(f"  {D}License:{R} MIT")

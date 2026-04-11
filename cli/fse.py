@@ -27,9 +27,9 @@ from commands import update as cmd_update
 from commands import version as cmd_version
 from commands import help as cmd_help
 from commands import about as cmd_about
+from commands import doctor as cmd_doctor
 
 
-# -- intro --
 def intro():
     br()
     print(f"{C} \u250c\u2500 {R}{W}formseal-embed{R}")
@@ -50,7 +50,6 @@ def intro():
     br()
 
 
-# -- router --
 def main():
     args    = sys.argv[1:]
     command = args[0] if args else None
@@ -68,7 +67,7 @@ def main():
 
         case "field":
             sub = args[1] if len(args) > 1 else None
-            cmd_configure.run("-f", args[2:])
+            cmd_configure.run("field", args[1:])
 
         case "-f":
             cmd_configure.run("-f", args[1:])
@@ -82,7 +81,7 @@ def main():
             cmd_update.run(sub, args[2:])
 
         case "doctor":
-            fail("fse doctor is not yet available.")
+            cmd_doctor.run()
 
         case None | "fse":
             intro()

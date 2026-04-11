@@ -17,7 +17,6 @@ try:
 except:
     pass
 
-# -- ansi colors --
 RESET  = "\x1b[0m"
 BOLD   = "\x1b[1m"
 DIM    = "\x1b[2m"
@@ -31,7 +30,6 @@ CYAN   = "\x1b[36m"
 WHITE  = "\x1b[37m"
 GRAY   = "\x1b[90m"
 
-# Semantic palette
 B = "\x1b[38;5;109m"  
 C = "\x1b[38;5;117m"  
 M = "\x1b[38;5;141m" 
@@ -44,7 +42,6 @@ D = DIM
 R = RESET  
 
 
-# -- primitives --
 def br():
     print()
 

@@ -2,7 +2,7 @@
 
 var FSE = {
 
-  endpoint: "https://your-api.example.com/submit",
+  endpoint: "YOUR_POST_API_LINK_HERE",
   origin: "contact-form",
   publicKey: "PASTE_YOUR_BASE64URL_PUBLIC_KEY_HERE",
 

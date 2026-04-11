@@ -1,5 +1,4 @@
 # commands/update.py
-# Update config values.
 
 import re
 from pathlib import Path

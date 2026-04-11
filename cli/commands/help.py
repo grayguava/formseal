@@ -10,7 +10,6 @@ def run():
     print(G + " " + "\u2500" * 52 + R)
     br()
 
-    # General
     print(f"  {G}>>{R} {Y}General{R}")
     print(G + " " + "\u2500" * 52 + R)
     cmd_line("fse init", "scaffold project")
@@ -20,7 +19,6 @@ def run():
     cmd_line("fse --aliases", "show shortand aliases")
     br()
 
-    # Configure
     print(f"  {G}>>{R} {Y}Configure{R}")
     print(G + " " + "\u2500" * 52 + R)
     cmd_line("fse configure quick", "set endpoint + key")
@@ -28,7 +26,6 @@ def run():
     cmd_line("fse field remove <name>", "remove field")
     br()
 
-    # Update
     print(f"  {G}>>{R} {Y}Update{R}")
     print(G + " " + "\u2500" * 52 + R)
     cmd_line("fse update endpoint <url>", "update POST endpoint")
@@ -36,13 +33,11 @@ def run():
     cmd_line("fse update origin <name>", "update form origin")
     br()
 
-    # Coming soon
-    print(f"  {G}>>{R} {M}Coming Soon{R}")
+    print(f"  {G}>>{R} {Y}Validate{R}")
     print(G + " " + "\u2500" * 52 + R)
-    cmd_line("fse doctor", "validate config and schema")
+    cmd_line("fse doctor", "validate config and files")
     br()
 
-    # Docs
     print(f"  {G}>>{R} {Y}Docs{R}")
     print(G + " " + "\u2500" * 52 + R)
     link("https://github.com/grayguava/formseal-embed/docs")

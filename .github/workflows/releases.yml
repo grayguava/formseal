@@ -17,7 +17,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      actions: write
 
     steps:
       - name: Checkout
@@ -98,7 +97,7 @@ jobs:
             `${{ steps.assets.outputs.basename }}.zip`  ${{ steps.assets.outputs.sha_zip }}
             `${{ steps.assets.outputs.basename }}.tar.gz`  ${{ steps.assets.outputs.sha_tar }}
 
-      - name: Wait then trigger npm publish
+      - name: Wait 30s then trigger npm publish
         run: |
           sleep 30
           gh workflow run npm-publish.yml
