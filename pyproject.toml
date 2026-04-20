@@ -20,7 +20,7 @@ fse = "cli.fse:main"
 packages = [
     "cli",
     "cli.commands",
-    "ui",
+    "cli.ui",
 ]
 
 [tool.setuptools.package-data]
