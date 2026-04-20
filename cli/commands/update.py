@@ -3,7 +3,7 @@
 import re
 from pathlib import Path
 
-from ui.output import br, rule, row, code, fail, C, G, Y, S, W, R, D
+from ui import br, rule, row, code, fail, C, G, Y, S, W, R, D
 
 CONFIG_PATH = Path.cwd() / "formseal-embed" / "config" / "fse.config.js"
 

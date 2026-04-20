@@ -4,7 +4,7 @@
 import shutil
 from pathlib import Path
 
-from ui.output import br, rule, row, code, link, fail, C, G, Y, S, W, R, D
+from ui import br, rule, row, code, link, fail, header, ok, C, G, Y, S, W, R, D
 
 
 SRC  = Path(__file__).resolve().parent.parent.parent / "src"
@@ -76,8 +76,7 @@ def run():
     shutil.copytree(SRC, DEST)
 
     br()
-    print(f"{C} \u250c\u2500 {R}{W}formseal-embed{R}  {S}initialized{R}")
-    print(G + " " + "\u2500" * 52 + R)
+    ok("initialized")
     br()
 
     do_config = _confirm("Configure now?")
@@ -173,8 +172,7 @@ def run():
     shutil.copytree(SRC, DEST)
 
     br()
-    print(f"{C} \u250c\u2500 {R}{W}formseal-embed{R}  {S}initialized{R}")
-    print(G + " " + "\u2500" * 52 + R)
+    ok("initialized")
     br()
 
     do_config = _confirm("Configure now?")

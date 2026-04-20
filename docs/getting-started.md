@@ -13,13 +13,13 @@ formseal-embed encrypts form submissions in the browser before they leave the us
 
 ## Quick setup
 
-### 1. Scaffold
+### 1. Install
 
 ```bash
-npx @formseal/embed init
+pip install formseal-embed
 ```
 
-Or, if installed globally (`npm install -g @formseal/embed`):
+### 2. Scaffold
 
 ```bash
 fse init

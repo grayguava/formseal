@@ -4,6 +4,7 @@
 
 import sys
 import os
+from pathlib import Path
 
 if os.name == "nt":
     try:
@@ -19,7 +20,7 @@ except:
 
 sys.path.insert(0, os.path.dirname(__file__))
 
-from ui.output import br, rule, cmd_line, link, fail, badge, C, G, Y, M, W, D, R, BOLD
+from ui import br, rule, cmd_line, link, fail, badge, C, G, Y, M, W, D, R, BOLD, header
 
 from commands import init as cmd_init
 from commands import configure as cmd_configure
@@ -30,24 +31,32 @@ from commands import about as cmd_about
 from commands import doctor as cmd_doctor
 
 
+def _load_version():
+    p = Path(__file__).parent / "version.txt"
+    if p.exists():
+        return p.read_text().strip()
+    return "dev"
+
+
+VERSION = _load_version()
+
+
+def _show_about():
+    br()
+    header()
+    br()
+    print(f"  {W}CLI for scaffolding and setting up formseal-embed in your project{R}")
+    br()
+    print(f"  Part of the {C}formseal{R} ecosystem")
+    br()
+    print(f"  {G}Repository:{R}  https://github.com/grayguava/formseal-embed")
+    print(f"  {G}License:{R}  MIT")
+    print(f"  {G}Maintained by:{R}  grayguava")
+    br()
+
+
 def intro():
-    br()
-    print(f"{C} \u250c\u2500 {R}{W}formseal-embed{R}")
-    print(G + " " + "\u2500" * 52 + R)
-    br()
-    print(f"  {G}Start:{R}")
-    br()
-    print(f"  {W}fse init{R}")
-    print(f"  {D}scaffold project files{R}")
-    br()
-    print(f"  {W}fse configure quick{R}")
-    print(f"  {D}set endpoint + key{R}")
-    br()
-    print(f"  {G}Help:{R}")
-    br()
-    print(f"  {W}fse --help{R}")
-    link("https://github.com/grayguava/formseal-embed/docs")
-    br()
+    _show_about()
 
 
 def main():

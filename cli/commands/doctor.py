@@ -6,7 +6,7 @@ import re
 import sys
 from pathlib import Path
 
-from ui.output import br, C, G, Y, RED, GREEN, S, W, R, D
+from ui import br, header, C, G, Y, RED, GREEN, S, W, R, D
 
 
 DEST = Path.cwd() / "formseal-embed"
@@ -14,8 +14,7 @@ DEST = Path.cwd() / "formseal-embed"
 
 def run():
     br()
-    print(f"{C} \u250c\u2500 {R}{W}formseal-embed{R}  {G}doctor{R}")
-    print(G + " " + "\u2500" * 52 + R)
+    header("doctor")
     br()
 
     groups = {

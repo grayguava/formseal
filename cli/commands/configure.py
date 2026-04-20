@@ -5,7 +5,7 @@ import re
 import json
 from pathlib import Path
 
-from ui.output import br, rule, row, code, fail, C, G, Y, S, W, R, D
+from ui import br, rule, row, code, fail, header, C, G, Y, S, W, R, D
 
 CONFIG_PATH = Path.cwd() / "formseal-embed" / "config" / "fse.config.js"
 FIELDS_PATH = Path.cwd() / "formseal-embed" / "config" / "fields.jsonl"
@@ -106,8 +106,7 @@ def run(subcommand: str, args: list):
 
 def _run_quick():
     br()
-    print(f"{C} \u250c\u2500 {R}{W}formseal-embed{R}  {G}quick configure{R}")
-    print(G + " " + "\u2500" * 52 + R)
+    header("quick configure")
     br()
 
     endpoint = _prompt("POST endpoint", ":")

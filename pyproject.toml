@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=65.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "formseal-embed"
+version = "3.3.0"
+description = "Encrypted contact form that never exposes plaintext to your server"
+readme = "README.md"
+license = {file = "LICENSE"}
+requires-python = ">=3.8"
+authors = [
+    {name = "grayguava"}
+]
+
+[project.scripts]
+fse = "cli.fse:main"
+
+[tool.setuptools]
+packages = [
+    "cli",
+    "cli.commands",
+    "ui",
+]
+
+[tool.setuptools.package-data]
+cli = []
