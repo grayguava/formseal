@@ -31,34 +31,6 @@ from commands import about as cmd_about
 from commands import doctor as cmd_doctor
 
 
-def _load_version():
-    p = Path(__file__).parent / "version.txt"
-    if p.exists():
-        return p.read_text().strip()
-    return "dev"
-
-
-VERSION = _load_version()
-
-
-def _show_about():
-    br()
-    header()
-    br()
-    print(f"  {W}CLI for scaffolding and setting up formseal-embed in your project{R}")
-    br()
-    print(f"  Part of the {C}formseal{R} ecosystem")
-    br()
-    print(f"  {G}Repository:{R}  https://github.com/grayguava/formseal-embed")
-    print(f"  {G}License:{R}  MIT")
-    print(f"  {G}Maintained by:{R}  grayguava")
-    br()
-
-
-def intro():
-    _show_about()
-
-
 def main():
     args    = sys.argv[1:]
     command = args[0] if args else None
@@ -92,8 +64,8 @@ def main():
         case "doctor":
             cmd_doctor.run()
 
-        case None | "fse":
-            intro()
+        case None | "fse" | "--about":
+            cmd_about.run()
 
         case "--help" | "-h":
             cmd_help.run()

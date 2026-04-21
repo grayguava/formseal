@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📖 Documentation
+    url: https://github.com/grayguava/formseal-embed/tree/main/docs
+    about: Browse the full formseal-embed documentation
+  - name: 🔧 Troubleshooting Guide
+    url: https://github.com/grayguava/formseal-embed/blob/main/docs/troubleshooting.md
+    about: Common issues and how to fix them
