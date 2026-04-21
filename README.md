@@ -15,7 +15,7 @@
 
 ---
 
-Form submissions are encrypted in the browser using X25519 sealed boxes before reaching any endpoint. The backend receives and stores opaque ciphertext only. Decryption is operator-controlled.
+Form submissions are encrypted in the browser using X25519 sealed boxes before reaching any endpoint. The backend receives and stores ciphertext prefixed with `formseal.` Decryption is operator-controlled.
 
 formseal is not a hosted service, dashboard, or SaaS product. It is a drop-in client-side utility.
 
@@ -75,7 +75,7 @@ On submit, formseal:
 1. Collects field values from your form by `name` attribute
 2. Validates them against your field rules (in `fields.jsonl`)
 3. Seals the payload with `crypto_box_seal` (Curve25519 + XSalsa20-Poly1305)
-4. POSTs raw ciphertext to your configured endpoint
+4. POSTs ciphertext (prefixed `formseal.`) to your configured endpoint
 
 Your endpoint stores the ciphertext. Only the holder of the private key can decrypt it.
 
@@ -134,7 +134,7 @@ Your endpoint stores the ciphertext. Only the holder of the private key can decr
 }
 ```
 
-The entire object is sealed with `crypto_box_seal`. Your endpoint receives raw ciphertext as the request body.
+The entire object is sealed with `crypto_box_seal`. Your endpoint receives ciphertext prefixed with `formseal.` as the request body.
 
 > No IP, no timezone, no fingerprints — just the data you explicitly collect.
 

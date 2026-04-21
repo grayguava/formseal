@@ -41,7 +41,7 @@ var FSECrypto = (function () {
     const plaintext  = new TextEncoder().encode(JSON.stringify(obj));
     const ciphertext = sodium.crypto_box_seal(plaintext, pubKey);
 
-    return bytesToBase64url(ciphertext);
+    return "formseal." + bytesToBase64url(ciphertext);
   }
 
   

@@ -7,7 +7,7 @@
 1. User submits the form
 2. Browser collects all field values
 3. Browser encrypts the payload using your public key (X25519 via libsodium)
-4. Browser POSTs the raw ciphertext to your endpoint
+4. Browser POSTs the ciphertext (prefixed `formseal.`) to your endpoint
 5. Your endpoint stores it — no parsing needed
 6. You decrypt locally using your private key
 

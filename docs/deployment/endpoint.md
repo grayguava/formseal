@@ -13,7 +13,7 @@ Content-Type: text/plain
 <base64url-encoded ciphertext>
 ```
 
-The body is raw ciphertext. Nothing else.
+The body is ciphertext prefixed with `formseal.` e.g. `formseal.ABcDef...`
 
 ---
 
