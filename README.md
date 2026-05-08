@@ -1,12 +1,13 @@
 # formseal-embed
 
 <p align="center">
-  <img src="fse.png" alt="formseal">
+  <img src="fse.png" alt="formseal-embed">
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/pypi/v/formseal-embed?style=flat&label=pypi&labelColor=1e293b&color=3776ab">
   <img src="https://img.shields.io/badge/license-MIT-fc8181?style=flat&labelColor=1e293b">
+  <img src="https://img.shields.io/github/actions/workflow/status/useFormseal/embed/publish.yml">
   <img src="https://img.shields.io/badge/formseal-ecosystem-10b981?style=flat&labelColor=1e293b">
 </p>
 

@@ -6,7 +6,7 @@ body:
     attributes:
       value: |
         Thanks for taking the time to report a bug! Please fill out the sections below.
-        Before submitting, check the [troubleshooting guide](https://github.com/grayguava/formseal-embed/blob/main/docs/troubleshooting.md) and search existing issues.
+        Before submitting, check the [troubleshooting guide](https://github.com/useFormseal/embed/blob/main/docs/troubleshooting.md) and search existing issues.
 
   - type: checkboxes
     id: preflight
@@ -15,7 +15,7 @@ body:
       options:
         - label: I searched existing issues and this hasn't been reported
           required: true
-        - label: I checked the [troubleshooting docs](https://github.com/grayguava/formseal-embed/blob/main/docs/troubleshooting.md)
+        - label: I checked the [troubleshooting docs](https://github.com/useFormseal/embed/blob/main/docs/troubleshooting.md)
           required: true
         - label: I am using the latest version of formseal-embed
           required: true

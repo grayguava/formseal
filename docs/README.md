@@ -19,7 +19,7 @@ Welcome to the formseal-embed documentation.
 
 formseal-embed is a client-side JavaScript library that encrypts form submissions in the browser before they leave the user's device. The backend receives ciphertext prefixed with `formseal.` — plaintext never touches your server.
 
-Use it together with [formseal-fetch](https://github.com/grayguava/formseal-fetch) to download and decrypt submissions.
+Use it together with [formseal-fetch](https://github.com/useFormseal/fetch) to download and decrypt submissions.
 
 ## Workflow
 

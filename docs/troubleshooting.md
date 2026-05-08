@@ -153,7 +153,7 @@ This is intentional — you can safely interrupt at any prompt.
 ## 7. Still stuck?
 
 1. Run `fse doctor` to validate your setup.
-2. Check [GitHub Issues](https://github.com/grayguava/formseal-embed/issues)
+2. Check [GitHub Issues](https://github.com/useFormseal/embed/issues)
 3. Open a new issue with:
    - Command you ran
    - Full error message

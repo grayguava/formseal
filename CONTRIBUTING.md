@@ -20,7 +20,7 @@ Thanks for your interest in contributing! Contributions of all kinds are welcome
 
 1. Fork the repository and clone your fork:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/formseal-embed.git
+   git clone https://github.com/useFormseal/embed.git
    cd formseal-embed
    ```
 

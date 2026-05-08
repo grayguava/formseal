@@ -25,7 +25,6 @@ The entire payload is a single encrypted blob:
   "origin": "contact-form",
   "id": "uuid",
   "submitted_at": "timestamp",
-  "client_tz": "Europe/London",
   "data": {
     "name": "John",
     "email": "john@example.com",
