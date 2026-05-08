@@ -25,7 +25,7 @@ def _get_help_groups():
             ("fse --aliases", "show shorthand flags"),
         ],
         "Docs": [
-            ("https://github.com/grayguava/formseal-embed", None),
+            ("https://github.com/useFormseal/embed", None),
         ],
     }
 
