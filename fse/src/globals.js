@@ -21,6 +21,7 @@
     "runtime/fse.payload.js",
     "runtime/fse.validate.js",
     "runtime/fse.form.js",
+    "runtime/fse.freeze.js",
   ];
 
   var FSE_FIELDS = {};
@@ -48,6 +49,7 @@
         sodium.ready.then(function () {
           try {
             FSEForm.mount();
+            logSummary();
           } catch (err) {
             console.error("[fse] Mount failed:", err);
           }
@@ -65,16 +67,17 @@
     fetch(url)
       .then(function (res) {
         if (!res.ok) {
-          console.error("[fse] " + res.status + " loading " + url + ". Aborting.");
+          console.error("[fse] HTTP " + res.status + " loading " + url + ". Aborting.");
           return null;
         }
         return res.text();
       })
       .then(function (code) {
         if (code === null || code === undefined) return;
-        
+
         if (FILES[index] === "config/fields.jsonl") {
           FSE_FIELDS = parseFieldsJsonl(code);
+          loadNext(index + 1);
         } else {
           var s = document.createElement("script");
           if (FILES[index] === "config/fse.config.js") {
@@ -82,12 +85,35 @@
           }
           s.textContent = code;
           document.head.appendChild(s);
+          loadNext(index + 1);
         }
-        loadNext(index + 1);
       })
       .catch(function (err) {
         console.error("[fse] Failed to load " + url + ":", err);
       });
+  }
+
+  function logSummary() {
+    var internal = window.__fse_internal__;
+    var cfg = internal ? internal.FSE : window.FSE;
+    if (!cfg) {
+      console.log("[fse] Initialized but config not found");
+      return;
+    }
+    var fields = cfg.fields || {};
+    var fieldCount = Object.keys(fields).length;
+    var endpoint = cfg.endpoint || "(not set)";
+    var form = cfg.form || "(not set)";
+    var status = "OK";
+    if (!window.isSecureContext) {
+      var loc = window.location;
+      if (!(loc.hostname === "localhost" || loc.hostname === "127.0.0.1")) {
+        status = "WARNING: HTTP (secure context required)";
+      }
+    }
+    console.log(
+      "[fse] Initialized | endpoint: " + endpoint + " | fields: " + fieldCount + " | form: " + form + " | " + status
+    );
   }
 
   if (document.readyState === "loading") {

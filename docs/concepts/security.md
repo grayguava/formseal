@@ -13,6 +13,16 @@ Proxies, logging middleware, and analytics tools that touch your endpoint never 
 **Storage breaches**
 If your submission store is compromised, attackers get ciphertext. Useless without the private key, which is never on that machine.
 
+**Runtime tampering**
+The runtime freezes its internal state at initialization. Config, encryption, and validation cannot be mutated by third-party scripts after the form loads.
+
+---
+
+## Requirements
+
+**HTTPS required**
+formseal runs only in secure contexts (HTTPS). It refuses to initialize on HTTP except for `localhost` and `127.0.0.1` during development.
+
 ---
 
 ## What it doesn't protect against

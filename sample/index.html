@@ -42,21 +42,10 @@
     [data-fse-error="fieldname"] elements are optional. FSE writes validation
     errors into them if present.
 
-    The honeypot input (name="_hp") is for spam protection.
-    Hide it with CSS -- do not use display:none or visibility:hidden.
+    Spam protection (honeypot, CAPTCHA, etc.) is developer responsibility.
   -->
 
-  <form id="contact-form" novalidate autocomplete="on">
-
-    <!-- Honeypot -->
-    <input
-      type="text"
-      name="_hp"
-      tabindex="-1"
-      autocomplete="off"
-      aria-hidden="true"
-      style="position:absolute; left:-9999px; opacity:0; height:0;"
-    >
+  <form id="contact-form" method="POST" novalidate autocomplete="on">
 
     <div>
       <label for="field-name">Your name</label>
@@ -93,7 +82,7 @@
     };
   </script>
 
-  <script src="/formseal-embed/globals.js"></script>
+<script src="/formseal-embed/globals.js"></script>
 
 </body>
 </html>

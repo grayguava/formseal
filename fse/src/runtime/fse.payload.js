@@ -4,7 +4,9 @@
 var FSEPayload = (function () {
 
   function build(data) {
-    if (typeof FSE === "undefined") {
+    var internal = window.__fse_internal__;
+    var FSE = internal ? internal.FSE : window.FSE;
+    if (!FSE) {
       throw new Error("[fse/payload] FSE is not defined.");
     }
 

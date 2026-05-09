@@ -29,6 +29,15 @@ var FSECrypto = (function () {
       );
     }
 
+    if (!window.isSecureContext) {
+      var loc = window.location;
+      if (!(loc.hostname === "localhost" || loc.hostname === "127.0.0.1")) {
+        throw new Error(
+          "[fse/crypto] Secure context (HTTPS) required. formseal will not run on HTTP."
+        );
+      }
+    }
+
     await sodium.ready;
 
     const pubKey = base64urlToBytes(publicKey);

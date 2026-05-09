@@ -64,7 +64,7 @@ Place it before `</body>`.
 ## Full example
 
 ```html
-<form id="contact-form">
+<form id="contact-form" method="POST">
   <div>
     <label>Name</label>
     <input name="name">
@@ -112,24 +112,6 @@ var FSE = {
   status: "#msg-box",
 };
 ```
-
----
-
-## Honeypot
-
-Add a hidden field to reject bot submissions:
-
-```html
-<input
-  type="text"
-  name="_hp"
-  tabindex="-1"
-  autocomplete="off"
-  style="position:absolute;left:-9999px;"
->
-```
-
-formseal discards the submission if this field has a value.
 
 ---
 

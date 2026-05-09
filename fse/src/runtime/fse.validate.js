@@ -4,7 +4,9 @@
 var FSEValidate = (function () {
 
   function validate(data) {
-    if (typeof FSE === "undefined") {
+    var internal = window.__fse_internal__;
+    var FSE = internal ? internal.FSE : window.FSE;
+    if (!FSE) {
       throw new Error("[fse/validate] FSE is not defined.");
     }
 
@@ -24,6 +26,10 @@ var FSEValidate = (function () {
       }
 
       if (field.maxLength && value.length > field.maxLength) {
+        console.warn(
+          "[fse/validate] Field '" + name + "' exceeds maxLength (" +
+          value.length + " > " + field.maxLength + "). Submission blocked."
+        );
         errors.push({
           name:    name,
           message: name + " must be " + field.maxLength + " characters or fewer.",

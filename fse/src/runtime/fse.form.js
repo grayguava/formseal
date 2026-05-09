@@ -4,6 +4,10 @@
 var FSEForm = (function () {
 
   function requireGlobal(name) {
+    var internal = window.__fse_internal__;
+    if (internal && internal[name]) {
+      return internal[name];
+    }
     if (typeof window[name] === "undefined") {
       throw new Error("[fse/form] " + name + " is not defined.");
     }
@@ -111,9 +115,6 @@ var FSEForm = (function () {
 
     formEl.addEventListener("submit", async function (e) {
       e.preventDefault();
-
-      var hp = formEl.querySelector("[name='_hp']");
-      if (hp && hp.value) return;
 
       clearFieldErrors(fields);
       clearStatus(cfg);
