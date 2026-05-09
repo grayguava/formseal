@@ -1,7 +1,7 @@
 # fse/cli/commands/general/version.py
 # Show version info.
 
-VERSION = "0.0.0"
+VERSION = "3.7.0"
 
 
 def run():
