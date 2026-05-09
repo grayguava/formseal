@@ -17,6 +17,7 @@ def _get_help_groups():
             ("fse field add <name>", "add field"),
             ("fse field remove <name>", "remove field"),
             ("fse doctor", "validate config"),
+            ("fse keygen", "generate X25519 keypair"),
         ],
         "Info": [
             ("fse --about", "project info"),

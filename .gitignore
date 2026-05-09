@@ -5,3 +5,4 @@ __pycache__/
 *.pyc
 *.pyo
 .pytest_cache/
+formseal_embed.egg-info/
