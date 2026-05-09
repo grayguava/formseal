@@ -49,16 +49,8 @@ fse set endpoint https://your-api.example.com/submit
 
 **Solution**: Generate a new key pair:
 
-```python
-import base64
-from nacl.public import PrivateKey
-
-key = PrivateKey.generate()
-public = base64.urlsafe_b64encode(bytes(key.public_key)).rstrip(b'=').decode()
-private = base64.urlsafe_b64encode(bytes(key)).rstrip(b'=').decode()
-
-print(f"Public key: {public}")
-print(f"Private key: {private}")
+```bash
+fse keygen
 ```
 
 ---

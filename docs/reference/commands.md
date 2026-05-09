@@ -81,6 +81,27 @@ Checks:
 
 ---
 
+### keygen
+
+Generate a new X25519 keypair for form encryption.
+
+```bash
+fse keygen
+```
+
+Output:
+
+```json
+{
+  "publicKey": "ABcdEfGhIjKlMnOpQrStUvWxYz0123456789_",
+  "privateKey": "zyxwvutsrqponmlkjihgfedcba0987654321_"
+}
+```
+
+**WARNING:** Keep both keys safe. The private key is needed to decrypt submissions — loss means permanent data loss.
+
+---
+
 ### reset
 
 Remove and re-scaffold.

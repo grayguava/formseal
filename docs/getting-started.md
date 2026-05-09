@@ -29,16 +29,11 @@ Creates a `formseal-embed/` directory in your project.
 
 ### 2. Generate keys
 
-```python
-import base64
-from nacl.public import PrivateKey
-
-key = PrivateKey.generate()
-print("public: ", base64.urlsafe_b64encode(bytes(key.public_key)).rstrip(b'=').decode())
-print("private:", base64.urlsafe_b64encode(bytes(key)).rstrip(b'=').decode())
+```bash
+fse keygen
 ```
 
-Store the private key somewhere safe. You'll use the public key in config.
+This outputs your public/private key pair. Store the private key somewhere safe — you'll need it to decrypt submissions.
 
 ### 3. Configure
 
