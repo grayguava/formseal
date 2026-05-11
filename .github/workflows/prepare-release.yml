@@ -12,6 +12,7 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     permissions:
       contents: write
+
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
@@ -30,6 +31,7 @@ jobs:
           VERSION: ${{ steps.version.outputs.version }}
         run: |
           TAG="v$VERSION"
+
           if git ls-remote --tags origin "refs/tags/$TAG" | grep -q "$TAG"; then
             echo "exists=true" >> $GITHUB_OUTPUT
             echo "::warning::Tag $TAG already exists — skipping tag creation"
@@ -44,11 +46,59 @@ jobs:
           VERSION: ${{ steps.version.outputs.version }}
         run: |
           TAG="v$VERSION"
+
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
+
           git tag -a "$TAG" -m "chore(release): tag $TAG for PyPI publish and GitHub release"
           git push origin "$TAG"
+
           echo "::notice::Created and pushed tag $TAG"
+
+      - name: Build release artifacts
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          mkdir -p dist/fse
+          mkdir -p dist/fse.browser
+
+          echo "::group::Preparing full package artifact"
+          cp -r fse dist/fse/
+          cp pyproject.toml dist/fse/
+          cp LICENSE dist/fse/
+          cp README.md dist/fse/
+          echo "::endgroup::"
+
+          echo "::group::Preparing browser runtime artifact"
+          cp -r fse/src/runtime dist/fse.browser/
+          cp -r fse/src/vendor dist/fse.browser/
+          cp -r fse/src/config dist/fse.browser/
+          cp fse/src/globals.js dist/fse.browser/
+          cp README.md dist/fse.browser/
+          echo "::endgroup::"
+
+          echo "::group::Creating archives"
+
+          tar -czf "fse.v$VERSION.tar.gz" -C dist/fse .
+          zip -rq "fse.v$VERSION.zip" dist/fse
+
+          tar -czf "fse.browser.v$VERSION.tar.gz" -C dist/fse.browser .
+          zip -rq "fse.browser.v$VERSION.zip" dist/fse.browser
+
+          echo "::endgroup::"
+
+      - name: Generate checksums
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          sha256sum \
+            "fse.v$VERSION.tar.gz" \
+            "fse.v$VERSION.zip" \
+            "fse.browser.v$VERSION.tar.gz" \
+            "fse.browser.v$VERSION.zip" \
+            > SHA256SUMS.txt
+
+          echo "::notice::Generated SHA256SUMS.txt"
 
       - name: Create or update draft release
         env:
@@ -56,22 +106,44 @@ jobs:
           VERSION: ${{ steps.version.outputs.version }}
         run: |
           TAG="v$VERSION"
+
           BODY=$(cat <<EOF
-          ## What's Changed
+          ## What's new
           - Updated to v$VERSION
           EOF
           )
+
           if gh release view "$TAG" >/dev/null 2>&1; then
             echo "::notice::Release $TAG exists — updating"
+
             gh release edit "$TAG" \
-              --title "Release $TAG" \
+              --title "$TAG" \
               --notes "$BODY" \
               --draft
           else
             echo "::notice::Creating draft release $TAG"
+
             gh release create "$TAG" \
               --title "Release $TAG" \
               --notes "$BODY" \
               --draft
           fi
+
           echo "::notice::Draft release $TAG is ready"
+
+      - name: Upload release assets
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          TAG="v$VERSION"
+
+          gh release upload "$TAG" \
+            "fse.v$VERSION.tar.gz" \
+            "fse.v$VERSION.zip" \
+            "fse.browser.v$VERSION.tar.gz" \
+            "fse.browser.v$VERSION.zip" \
+            SHA256SUMS.txt \
+            --clobber
+
+          echo "::notice::Uploaded release assets for $TAG"
