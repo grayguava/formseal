@@ -1,6 +1,6 @@
 # Contributing to formseal-embed
 
-Thanks for your interest in contributing! Contributions of all kinds are welcome — bug fixes, new features, docs, and more.
+Thanks for your interest in contributing! Contributions of all kinds are welcome — bug fixes, security, new features, docs, and more.
 
 ---
 
@@ -72,10 +72,6 @@ formseal-embed/
 ## Versioning
 
 The version string lives in **`version.txt`** and is the single source of truth. The publish workflow reads it and injects it into the code at build time.
-
-When preparing a release:
-1. Update `version.txt` with the new version (e.g. `1.0.0`)
-2. Trigger the **Publish to PyPI** workflow from GitHub Actions
 
 Do not edit the `version` field in `pyproject.toml` manually — it gets overwritten by the workflow.
 

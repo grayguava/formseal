@@ -14,7 +14,6 @@ Every encrypted payload includes a `version` field. This lets your storage layer
   "origin": "contact-form",
   "id": "uuid",
   "submitted_at": "2024-01-01T00:00:00.000Z",
-  "client_tz": "Europe/London",
   "data": { ... }
 }
 ```
