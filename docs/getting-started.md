@@ -64,8 +64,8 @@ Then add your form markup. See [Integration → HTML](../integration/html.md).
 
 ## Read more
 
-- [How it works](../concepts/how-it-works.md)
-- [Integration → HTML](../integration/html.md)
-- [Integration → Fields](../integration/fields.md)
-- [Deployment → Endpoint](../deployment/endpoint.md)
-- [Deployment → Decryption](../deployment/decryption.md)
+- [How it works](./concepts/how-it-works.md)
+- [Integration → HTML](./integration/html.md)
+- [Integration → Fields](./integration/fields.md)
+- [Deployment → Endpoint](./deployment/endpoint.md)
+- [Deployment → Decryption](./deployment/decryption.md)

@@ -29,10 +29,10 @@ The key must exactly match the HTML `name`. Inputs without a matching field key 
 | Option | Type | Description |
 |---|---|---|
 | `required` | boolean | Blocks submission if empty |
-| `type` | `"email"` / `"tel"` / `"text"` | Format validation (required) |
+| `type` | `"email"` / `"tel"` / `"text"` | `text` = no validation, `email` = basic email pattern, `tel` = phone pattern |
 | `maxLength` | number | Blocks submission if value exceeds this |
 
-`type` is required for each field.
+`type` is required for each field. `text` accepts any input (no format validation).
 
 ---
 

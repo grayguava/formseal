@@ -1,6 +1,6 @@
 # Versioning
 
-Every encrypted payload includes a `version` field. This lets your storage layer and any future tooling identify the schema without decrypting first.
+The entire payload (including the version field) is encrypted. Storage sees only opaque ciphertext — nothing is readable until decrypted with your private key.
 
 ---
 
@@ -25,8 +25,12 @@ Every encrypted payload includes a `version` field. This lets your storage layer
 | Version | Status |
 |---|---|
 | `fse.v1.0` | current |
-| `fse.v1.x` | forward-compatible |
-| anything else | invalid |
 
-All `v1.x` releases share the same envelope structure. Minor increments may add fields inside `data` but won't break existing decoders.
+All versions and their schemas are documented in [Schemas](../payload-schemas/README.md).
+
+---
+
+## Decryption
+
+When you decrypt, the `version` field tells your tool which schema to use. See [Decryption](./decryption.md).
 

@@ -14,7 +14,7 @@ Proxies, logging middleware, and analytics tools that touch your endpoint never 
 If your submission store is compromised, attackers get ciphertext. Useless without the private key, which is never on that machine.
 
 **Runtime tampering**
-The runtime freezes its internal state at initialization. Config, encryption, and validation cannot be mutated by third-party scripts after the form loads.
+The runtime includes a freeze layer (`fse.freeze.js`) that locks config and modules at initialization. Config, encryption, and validation cannot be mutated by third-party scripts after the form loads. Attempting to modify `window.__fse_internal__` or the module exports throws a TypeError.
 
 ---
 

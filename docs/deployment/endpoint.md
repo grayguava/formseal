@@ -32,7 +32,9 @@ export async function onRequestPost({ request, env }) {
 }
 ```
 
-Don't parse it. Don't try to decrypt it server-side. Just save the string.
+Don't parse it. Don't try to decrypt it server-side. Don't inspect the payload. Just save the string.
+
+**Never attempt server-side decryption**. The private key stays local on your machine.
 
 ---
 

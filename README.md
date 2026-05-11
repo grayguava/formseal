@@ -185,14 +185,14 @@ These are intentional.
 
 ## Documentation
 
-- [Getting started](./docs/getting-started.md)
-- [Concepts → How it works](./docs/concepts/how-it-works.md)
-- [Concepts → Security](./docs/concepts/security.md)
-- [Integration → HTML](./docs/integration/html.md)
-- [Integration → Fields](./docs/integration/fields.md)
-- [Integration → JavaScript](./docs/integration/javascript.md)
-- [Deployment → Endpoint](./docs/deployment/endpoint.md)
-- [Deployment → Decryption](./docs/deployment/decryption.md)
+- [Getting started](/docs/getting-started.md)
+- [Concepts → How it works](/docs/concepts/how-it-works.md)
+- [Concepts → Security](/docs/concepts/security.md)
+- [Integration → HTML](/docs/integration/html.md)
+- [Integration → Fields](/docs/integration/fields.md)
+- [Integration → JavaScript](/docs/integration/javascript.md)
+- [Deployment → Endpoint](/docs/deployment/endpoint.md)
+- [Deployment → Decryption](/docs/deployment/decryption.md)
 
 ---
 

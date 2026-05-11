@@ -116,10 +116,9 @@ fse doctor                   # validate configuration
 fse field add email type:email  # add a field
 ```
 
-If your change touches the install/packaging path, test both install methods:
+If your change touches the install/packaging path, test with local install method:
 ```bash
 pipx install -e .            # local dev
-pip install formseal-embed   # from PyPI (after publishing)
 ```
 
 ---
