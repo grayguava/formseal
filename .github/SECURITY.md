@@ -28,7 +28,7 @@ Include:
 
 ---
 
-## What formseal protects
+## What formseal-embed protects
 
 - **Interception in transit** — server receives ciphertext only
 - **Server-side data leaks** — plaintext never reaches your server
@@ -36,7 +36,7 @@ Include:
 
 ---
 
-## What formseal does NOT protect
+## What formseal-embed does NOT protect
 
 - **Compromised client** — malware on user's device can read keystrokes before encryption
 - **Wrong endpoint** — encryption works even if submitting to attacker-controlled URL
@@ -72,4 +72,4 @@ It does **NOT** protect against:
 
 ## See also
 
-[Security Concepts](../docs/concepts/security.md)
+[Security Concepts](/docs/concepts/security.md)
