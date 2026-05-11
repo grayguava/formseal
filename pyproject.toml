@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "formseal-embed"
 version = "3.7.0"
-description = "Encrypted contact form that never exposes plaintext to your server"
+description = "Client-side form encryption that encrypts submissions before they leave the browser and works with any POST endpoint."
 readme = "README.md"
 license = {file = "LICENSE"}
 requires-python = ">=3.8"
@@ -13,6 +13,10 @@ dependencies = ["pynacl"]
 authors = [
     {name = "grayguava"}
 ]
+
+[project.urls]
+Homepage = "https://github.com/useFormseal/formseal-embed"
+Repository = "https://github.com/useFormseal/formseal-embed"
 
 [project.scripts]
 fse = "fse.fse:main"
