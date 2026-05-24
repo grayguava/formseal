@@ -1,16 +1,12 @@
-# fse/cli/general/helpers.py
-# Shared helper functions
-
 import base64
 import re
 from pathlib import Path
 
-from fse.cli.ui import br, G, D, R
-
+from fse.ui import br, G, D, R
 
 CONFIG_PATH = Path.cwd() / "formseal-embed" / "config" / "fse.config.js"
 FIELDS_PATH = Path.cwd() / "formseal-embed" / "config" / "fields.jsonl"
-SRC  = Path(__file__).resolve().parent.parent.parent / "src"
+SRC  = Path(__file__).resolve().parent.parent / "src"
 DEST = Path.cwd() / "formseal-embed"
 
 MARKERS = {
@@ -20,14 +16,12 @@ MARKERS = {
     "origin":    "origin:",
 }
 
-
 def _prompt(label: str) -> str:
     try:
         return input(f"  {D}{label}{R}: ").strip()
     except (KeyboardInterrupt, EOFError):
         br()
         return ""
-
 
 def _confirm(prompt: str) -> bool:
     try:
@@ -36,7 +30,6 @@ def _confirm(prompt: str) -> bool:
         br()
         return False
 
-
 def _normalize_endpoint(url: str) -> str:
     url = url.strip()
     if url.startswith("https://"):
@@ -44,7 +37,6 @@ def _normalize_endpoint(url: str) -> str:
     if url.startswith("http://"):
         return url.replace("http://", "https://", 1)
     return "https://" + url
-
 
 def _patch_config(field: str, value: str):
     marker = MARKERS.get(field)
@@ -67,7 +59,6 @@ def _patch_config(field: str, value: str):
     if matched:
         CONFIG_PATH.write_text("".join(updated), encoding="utf-8")
     return matched
-
 
 def _validate_key(key):
     try:

@@ -1,33 +1,56 @@
-## What's new
+# What's new
 
-### Features
 
-- 
+## Browser runtime
 
-### Breaking changes
-
-- None.
-
-### Fixes
+#### Features
 
 - 
 
-### Fixes
+#### Breaking changes
 
 - 
 
-### Security
-
-- None.
-
-### Improvements
+#### Fixes
 
 - 
 
-### Docs
+#### Security
 
--
+- 
 
-### Internal
+#### Improvements
 
--
+- 
+
+---
+
+## CLI
+
+---
+
+#### Features
+
+- 
+
+#### Breaking changes
+
+- 
+
+#### Fixes
+
+- 
+
+#### Security
+
+- 
+
+#### Improvements
+
+- 
+
+---
+
+## Docs
+
+- 

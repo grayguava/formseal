@@ -28,7 +28,7 @@ jobs:
       - name: Update version.py
         run: |
           VERSION="${{ steps.version.outputs.version }}"
-          sed -i "s/VERSION = \".*\"/VERSION = \"$VERSION\"/" fse/cli/commands/general/version.py
+          sed -i "s/VERSION = \".*\"/VERSION = \"$VERSION\"/" fse/commands/version.py
 
       - name: Update pyproject.toml
         run: |

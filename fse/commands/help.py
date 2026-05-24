@@ -1,8 +1,5 @@
-# fse/cli/commands/general/help.py
-# Help command - shows all available commands
-
-from fse.cli.ui import br, header, cmd_line, rule
-from fse.cli.ui.styles import C, G, R, W, GRAY
+from fse.ui import br, header, rule
+from fse.ui.styles import C, G, R, W, GRAY
 
 
 def _get_help_groups():
@@ -14,9 +11,9 @@ def _get_help_groups():
         "Configuration": [
             ("fse set endpoint", "set endpoint"),
             ("fse set key", "set encryption key"),
+            ("fse set origin", "set form origin"),
             ("fse field add <name>", "add field"),
             ("fse field remove <name>", "remove field"),
-            ("fse doctor", "validate config"),
             ("fse keygen", "generate X25519 keypair"),
         ],
         "Info": [

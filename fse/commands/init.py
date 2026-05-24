@@ -1,10 +1,7 @@
-# fse/cli/commands/init.py
-# Init command - scaffold files
-
 import shutil
 
-from fse.cli.ui import br, ok, fail, W, R
-from fse.cli.general.helpers import SRC, DEST
+from fse.ui import br, ok, fail, W, R
+from fse.helpers.config import SRC, DEST
 
 
 def run(_=None):

@@ -1,7 +1,7 @@
 # fse/cli/ui/headers.py
 # Header and rule functions
 
-from fse.cli.ui.styles import C, G, R, W, Y, HEAD
+from fse.ui.styles import C, G, R, W, Y, HEAD
 
 
 def header(title=""):

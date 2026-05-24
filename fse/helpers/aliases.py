@@ -1,14 +1,10 @@
-# fse/general/aliases.py
-# Shorthand aliases
-
 ALIASES = {
+    "-i":  ["init"],
+    "-r":  ["reset"],
     "-f":  ["field"],
-    "-s":  ["set"],
 }
 
-
 def resolve(args):
-    """Resolve aliases in argument list."""
     if not args:
         return args
 

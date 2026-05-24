@@ -45,6 +45,7 @@ pip install formseal-embed
 fse init
 fse set endpoint
 fse set key
+fse set origin
 fse --status
 ```
 

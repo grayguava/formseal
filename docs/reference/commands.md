@@ -27,16 +27,18 @@ Creates a `formseal-embed/` directory with:
 
 ### set
 
-Configure endpoint and public key.
+Configure endpoint, public key, and form origin.
 
 ```bash
 # Interactive mode — prompts until valid
 fse set endpoint
 fse set key
+fse set origin
 
 # Non-interactive — value provided directly
 fse set endpoint https://your-api.example.com/submit
 fse set key ABcdEfGhIjKlMnOpQrStUvWxYz0123456789_
+fse set origin contact-form
 ```
 
 Press `Enter` with no input to skip.
@@ -54,6 +56,12 @@ fse field remove <name>
 
 **Field types:** `text`, `email`, `tel`
 
+The `add` keyword can be omitted — the first argument is treated as the field name:
+
+```bash
+fse field phone type:tel required:false    # same as fse field add phone type:tel ...
+```
+
 **Examples:**
 
 ```bash
@@ -61,23 +69,8 @@ fse field add name type:text
 fse field add email type:email required:true
 fse field add message type:text required:true maxLength:1000
 fse field remove phone
+fse field phone type:tel required:false        # implicit add
 ```
-
----
-
-### doctor
-
-Validate configuration and files.
-
-```bash
-fse doctor
-```
-
-Checks:
-- Config file exists
-- Endpoint uses HTTPS
-- Public key format is valid
-- Fields are properly defined
 
 ---
 
@@ -87,9 +80,17 @@ Generate a new X25519 keypair for form encryption.
 
 ```bash
 fse keygen
+fse keygen --json           # machine-readable JSON output
 ```
 
-Output:
+Default output (human-readable):
+
+```
+    Public key:      ABcdEfGhIjKlMnOpQrStUvWxYz0123456789_
+    Private key:     zyxwvutsrqponmlkjihgfedcba0987654321_
+```
+
+With `--json`:
 
 ```json
 {
@@ -118,6 +119,7 @@ Show current configuration.
 
 ```bash
 fse --status
+fse --status -fields       # also show per-field details
 ```
 
 ---

@@ -38,7 +38,9 @@
         if (key) {
           fields[key] = obj[key];
         }
-      } catch (e) {}
+      } catch (e) {
+        console.warn("[fse] Invalid JSON in fields.jsonl line:", line);
+      }
     }
     return fields;
   }

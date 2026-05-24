@@ -1,13 +1,10 @@
-# fse/cli/commands/set.py
-# Set command - configure endpoint and key
-
-from fse.cli.ui import br, row, W, R, S, G, GRAY, CROSS, fail, rule
-from fse.cli.general.helpers import _normalize_endpoint, _patch_config, _validate_key, CONFIG_PATH
+from fse.ui import br, row, W, R, G, GRAY, CROSS, fail, rule
+from fse.helpers.config import _normalize_endpoint, _patch_config, _validate_key, CONFIG_PATH, _prompt
 
 
 def run(args):
     if not args:
-        fail("Usage: fse set <endpoint|key> [value]")
+        fail("Usage: fse set <endpoint|key|origin> [value]")
 
     subcommand = args[0]
     cmd_args = args[1:]
@@ -22,9 +19,11 @@ def run(args):
         _set_endpoint(cmd_args)
     elif subcommand in ("key", "k"):
         _set_key(cmd_args)
+    elif subcommand in ("origin", "o"):
+        _set_origin(cmd_args)
     else:
         fail(f"Unknown: {subcommand}\n" +
-             f"           Use fse set endpoint or fse set key")
+             f"           Use fse set endpoint, fse set key, or fse set origin")
 
 
 def _set_endpoint(args):
@@ -44,13 +43,13 @@ def _set_endpoint(args):
 
     if not original.startswith("http://") and not original.startswith("https://"):
         br()
-        print(f"  {GRAY}ℹ No protocol provided — using https://{R}")
+        print(f"  {GRAY}ℹ  No protocol provided — using https://{R}")
 
     _patch_config("endpoint", url)
     br()
-    print(f"  {S}*{R} {G}Updated!{R}")
+    print(f"  {G}✨{R} Updated!")
     rule()
-    row(">", "endpoint", url)
+    row("", "endpoint", url)
 
 
 def _prompt_loop_endpoint():
@@ -63,7 +62,7 @@ def _prompt_loop_endpoint():
         url = _normalize_endpoint(value)
         if url.startswith("https://"):
             if value != url:
-                print(f"  {GRAY}ℹ No protocol provided — using https://{R}")
+                print(f"  {GRAY}ℹ  No protocol provided — using https://{R}")
             return url
 
         print(f"{CROSS} Endpoint must use HTTPS")
@@ -86,9 +85,9 @@ def _set_key(args):
 
     _patch_config("key", value)
     br()
-    print(f"  {S}*{R} {G}Updated!{R}")
+    print(f"  {G}✨{R} Updated!")
     rule()
-    row(">", "key", value[:24] + "...")
+    row("", "key", value[:24] + "...")
 
 
 def _prompt_loop_key():
@@ -105,4 +104,17 @@ def _prompt_loop_key():
         print(f"  Expected raw 32-byte X25519 public key in base64url format")
 
 
-from fse.cli.general.helpers import _prompt
+def _set_origin(args):
+    value = args[0] if args else None
+
+    if not value:
+        value = _prompt("Form origin")
+        if not value:
+            print(f"  {GRAY}skipped{R}")
+            return
+
+    _patch_config("origin", value)
+    br()
+    print(f"  {G}✨{R} Updated!")
+    rule()
+    row("", "origin", value)

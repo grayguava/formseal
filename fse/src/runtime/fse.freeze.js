@@ -49,7 +49,7 @@
   } catch (e) {}
 
   try {
-    if (!window.hasOwnProperty("FSECrypto") || Object.getOwnPropertyDescriptor(window, "FSECrypto").configurable) {
+    if (Object.getOwnPropertyDescriptor(window, "FSECrypto").configurable) {
       Object.defineProperty(window, "FSECrypto", {
         value: FSECrypto,
         writable: false,
@@ -60,7 +60,7 @@
   } catch (e) {}
 
   try {
-    if (!window.hasOwnProperty("FSEPayload") || Object.getOwnPropertyDescriptor(window, "FSEPayload").configurable) {
+    if (Object.getOwnPropertyDescriptor(window, "FSEPayload").configurable) {
       Object.defineProperty(window, "FSEPayload", {
         value: FSEPayload,
         writable: false,
@@ -71,7 +71,7 @@
   } catch (e) {}
 
   try {
-    if (!window.hasOwnProperty("FSEValidate") || Object.getOwnPropertyDescriptor(window, "FSEValidate").configurable) {
+    if (Object.getOwnPropertyDescriptor(window, "FSEValidate").configurable) {
       Object.defineProperty(window, "FSEValidate", {
         value: FSEValidate,
         writable: false,
@@ -82,7 +82,7 @@
   } catch (e) {}
 
   try {
-    if (!window.hasOwnProperty("FSEForm") || Object.getOwnPropertyDescriptor(window, "FSEForm").configurable) {
+    if (Object.getOwnPropertyDescriptor(window, "FSEForm").configurable) {
       Object.defineProperty(window, "FSEForm", {
         value: FSEForm,
         writable: false,

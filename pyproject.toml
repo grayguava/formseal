@@ -19,16 +19,14 @@ Homepage = "https://github.com/useFormseal/formseal-embed"
 Repository = "https://github.com/useFormseal/formseal-embed"
 
 [project.scripts]
-fse = "fse.fse:main"
+fse = "fse.cli:main"
 
 [tool.setuptools]
 packages = [
     "fse",
-    "fse.cli",
-    "fse.cli.commands",
-    "fse.cli.commands.general",
-    "fse.cli.general",
-    "fse.cli.ui",
+    "fse.commands",
+    "fse.helpers",
+    "fse.ui",
 ]
 
 [tool.setuptools.package-data]

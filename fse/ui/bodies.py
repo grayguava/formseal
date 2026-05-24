@@ -1,15 +1,11 @@
 # fse/cli/ui/bodies.py
 # Body output functions
 
-from fse.cli.ui.styles import C, D, G, O, R, S, W, Y, BOLD, RED, XFATAL
+from fse.ui.styles import D, G, O, R, S, W, Y, XFATAL
 
 
 def br():
     print()
-
-
-def badge(label, color):
-    return f"{color}{BOLD} {label} {R}"
 
 
 def fail(msg):
@@ -23,20 +19,6 @@ def row(icon, label, value):
     pad   = 12
     label = (label + " " * pad)[:pad]
     print(f"{S}{icon}{R}  {D}{label}{R}  {W}{value}{R}")
-
-
-def cmd_line(command, desc):
-    pad     = 34
-    command = (command + " " * pad)[:pad]
-    print(f"  {W}{command}{R}{G}{desc}{R}")
-
-
-def code(msg):
-    print(f"  {O}{msg}{R}")
-
-
-def link(msg):
-    print(f"  {C}{msg}{R}")
 
 
 def ok(msg):

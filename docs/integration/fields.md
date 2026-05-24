@@ -41,11 +41,13 @@ The key must exactly match the HTML `name`. Inputs without a matching field key 
 ```bash
 # Add field (type required)
 fse field add phone type:tel required:false
+fse field phone type:tel required:false      # implicit (no "add" keyword)
 
 # Remove field
 fse field remove company
 
 # Modify field
-fse -f phone required:true
-fse -f phone maxLen:100 type:email
+fse field phone required:true
+fse field phone maxLen:100 type:email
+fse -f phone required:true                   # shorthand
 ```

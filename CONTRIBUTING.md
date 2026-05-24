@@ -42,24 +42,28 @@ Thanks for your interest in contributing! Contributions of all kinds are welcome
 ```
 formseal-embed/
 ├── fse/
-│   ├── fse.py                  # Entry point, argument dispatch
-│   ├── cmd.py                 # Command registry
-│   ├── __init__.py            # Central exports
+│   ├── cli.py                 # Entry point, dispatch
+│   ├── __main__.py            # python -m fse support
 │   ├── src/                   # Client-side JavaScript (scaffold source)
-│   ├── cli/
-│   │   ├── ui/                # Terminal output helpers
-│   │   │   ├── styles.py      # Colors, icons
-│   │   │   ├── headers.py     # header(), rule()
-│   │   │   └── bodies.py      # br(), row(), ok(), fail(), etc
-│   │   ├── general/           # Helpers (aliases, errors)
-│   │   └── commands/          # CLI commands
-│   │       ├── init.py        # fse init
-│   │       ├── reset.py       # fse reset
-│   │       ├── set.py         # fse set endpoint / key
-│   │       ├── field.py       # fse field add / remove
-│   │       ├── doctor.py      # fse doctor
-│   │       └── general/       # about, version, help, status
-│   ��── cli/__init__.py
+│   ├── commands/              # CLI commands (flat)
+│   │   ├── init.py            # fse init
+│   │   ├── reset.py           # fse reset
+│   │   ├── set.py             # fse set endpoint / key / origin
+│   │   ├── field.py           # fse field add / remove
+│   │   ├── keygen.py          # fse keygen
+│   │   ├── about.py           # fse --about
+│   │   ├── version.py         # fse --version
+│   │   ├── help.py            # fse --help
+│   │   └── status.py          # fse --status
+│   ├── helpers/               # Shared logic
+│   │   ├── config.py          # Paths, patching, validation
+│   │   ├── errors.py          # Error handlers
+│   │   ├── aliases.py         # Shorthand aliases
+│   │   └── fields.py          # Field type definitions
+│   └── ui/                    # Terminal output helpers
+│       ├── styles.py          # Colors, icons
+│       ├── headers.py         # header(), rule()
+│       └── bodies.py          # br(), row(), ok(), fail(), etc
 ├── docs/                      # End-user documentation
 ├── .github/
 │   └── workflows/            # GitHub Actions
@@ -81,7 +85,7 @@ Do not edit the `version` field in `pyproject.toml` manually — it gets overwri
 
 - Add a comment at the top of each logical block explaining what it does
 - Follow the patterns already in the file you're editing
-- Use the `cli/ui` module helpers (`info`, `fail`, `warn`, `br`, `header`) for all terminal output
+- Use the `fse.ui` module helpers (`info`, `fail`, `warn`, `br`, `header`) for all terminal output
 - Validate before writing — never persist invalid state
 - Never expose secrets or keys in output
 
@@ -112,7 +116,6 @@ fse init                     # scaffold a project
 fse set endpoint             # interactive endpoint config
 fse set key                  # interactive key config
 fse --status                 # show current config
-fse doctor                   # validate configuration
 fse field add email type:email  # add a field
 ```
 
