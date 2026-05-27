@@ -125,11 +125,11 @@ def _set_origin(args):
 def _set_logging(args):
     value = args[0] if args else None
 
-    if not value or value not in ("true", "false"):
+    if not value or value.lower() not in ("true", "false"):
         print(f"  Usage: fse set logging <true|false>")
         return
 
-    _patch_config("logging", value)
+    _patch_config("logging", value.lower())
     br()
     print(f"  {G}✨{R} Updated!")
     rule()
