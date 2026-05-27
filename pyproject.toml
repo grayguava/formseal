@@ -15,8 +15,8 @@ authors = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/useFormseal/formseal-embed"
-Repository = "https://github.com/useFormseal/formseal-embed"
+Homepage = "https://github.com/useFormseal/embed"
+Repository = "https://github.com/useFormseal/embed.git"
 
 [project.scripts]
 fse = "fse.cli:main"
