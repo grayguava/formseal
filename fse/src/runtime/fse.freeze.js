@@ -46,6 +46,7 @@
     Object.freeze(FSEPayload);
     Object.freeze(FSEValidate);
     Object.freeze(FSEForm);
+    Object.freeze(FSE_LOG);
   } catch (e) {}
 
   try {
@@ -85,6 +86,17 @@
     if (Object.getOwnPropertyDescriptor(window, "FSEForm").configurable) {
       Object.defineProperty(window, "FSEForm", {
         value: FSEForm,
+        writable: false,
+        configurable: false,
+        enumerable: false,
+      });
+    }
+  } catch (e) {}
+
+  try {
+    if (Object.getOwnPropertyDescriptor(window, "FSE_LOG").configurable) {
+      Object.defineProperty(window, "FSE_LOG", {
+        value: FSE_LOG,
         writable: false,
         configurable: false,
         enumerable: false,

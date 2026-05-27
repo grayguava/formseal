@@ -114,11 +114,17 @@ fse keygen
 2. Verify endpoint accepts POST requests.
 3. Ensure endpoint doesn't require authentication headers.
 
-### "fse is not defined"
+### Config syntax error
 
-**Cause**: Script not loaded before form submits.
+**Cause**: `fse.config.js` has a syntax error (missing brace, trailing comma, etc.).
 
-**Solution**: Load script in `<head>` or before `</body>`.
+**Solution**: Check the last saved change in `formseal-embed/config/fse.config.js`. The console shows `[formseal] Error: fse.config.js has a syntax error` with a fix hint.
+
+### Form not submitting without visible error
+
+**Cause**: Console logging suppressed via `logging: false` in config.
+
+**Solution**: Temporarily set `logging: true` (or run `fse set logging true`) to see warnings and info. Only errors appear when `logging` is off.
 
 ---
 

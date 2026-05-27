@@ -15,6 +15,7 @@
 
   var FILES = [
     "vendor/sodium.js",
+    "runtime/fse.log.js",
     "config/fields.jsonl",
     "config/fse.config.js",
     "runtime/fse.crypto.js",
@@ -39,7 +40,7 @@
           fields[key] = obj[key];
         }
       } catch (e) {
-        console.warn("[fse] Invalid JSON in fields.jsonl line:", line);
+        FSE_LOG.warn("Invalid JSON in fields.jsonl", "Each line must be valid JSON with a single field key, e.g. {\"email\": {\"type\": \"email\"}}.");
       }
     }
     return fields;
@@ -49,17 +50,21 @@
     if (index >= FILES.length) {
       try {
         sodium.ready.then(function () {
+          var cfg = window.FSE || (window.__fse_internal__ && window.__fse_internal__.FSE);
+          if (!cfg) {
+            return;
+          }
           try {
             FSEForm.mount();
             logSummary();
           } catch (err) {
-            console.error("[fse] Mount failed:", err);
+            FSE_LOG.error("Mount failed — " + err.message);
           }
         }).catch(function (err) {
-          console.error("[fse] sodium.ready failed:", err);
+          FSE_LOG.error("sodium.ready failed — " + err.message);
         });
       } catch (err) {
-        console.error("[fse] sodium is not available:", err);
+        FSE_LOG.error("sodium (libsodium) is not available", "Ensure vendor/sodium.js loaded correctly from formseal-embed/vendor/sodium.js.");
       }
       return;
     }
@@ -69,7 +74,7 @@
     fetch(url)
       .then(function (res) {
         if (!res.ok) {
-          console.error("[fse] HTTP " + res.status + " loading " + url + ". Aborting.");
+          FSE_LOG.error("HTTP " + res.status + " loading " + url, "Check that the file exists at the expected path and the server is running.");
           return null;
         }
         return res.text();
@@ -84,6 +89,13 @@
           var s = document.createElement("script");
           if (FILES[index] === "config/fse.config.js") {
             code = "var FSE_FIELDS = " + JSON.stringify(FSE_FIELDS) + ";\n" + code;
+            try {
+              new Function(code);
+            } catch (e) {
+              FSE_LOG.error("fse.config.js has a syntax error — submission encryption disabled", "Check formseal-embed/config/fse.config.js for missing braces or commas.");
+              loadNext(index + 1);
+              return;
+            }
           }
           s.textContent = code;
           document.head.appendChild(s);
@@ -91,17 +103,13 @@
         }
       })
       .catch(function (err) {
-        console.error("[fse] Failed to load " + url + ":", err);
+        FSE_LOG.error("Failed to load " + url + " — " + err.message);
       });
   }
 
   function logSummary() {
     var internal = window.__fse_internal__;
     var cfg = internal ? internal.FSE : window.FSE;
-    if (!cfg) {
-      console.log("[fse] Initialized but config not found");
-      return;
-    }
     var fields = cfg.fields || {};
     var fieldCount = Object.keys(fields).length;
     var endpoint = cfg.endpoint || "(not set)";
@@ -113,9 +121,7 @@
         status = "WARNING: HTTP (secure context required)";
       }
     }
-    console.log(
-      "[fse] Initialized | endpoint: " + endpoint + " | fields: " + fieldCount + " | form: " + form + " | " + status
-    );
+    FSE_LOG.info("Initialized | endpoint: " + endpoint + " | fields: " + fieldCount + " | form: " + form + " | origin: " + (cfg.origin || "") + " | " + status);
   }
 
   if (document.readyState === "loading") {

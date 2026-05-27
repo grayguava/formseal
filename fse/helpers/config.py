@@ -14,7 +14,10 @@ MARKERS = {
     "publicKey": "publicKey:",
     "key":       "publicKey:",
     "origin":    "origin:",
+    "logging":   "logging:",
 }
+
+BOOLEAN_KEYS = {"logging"}
 
 def _prompt(label: str) -> str:
     try:
@@ -53,7 +56,10 @@ def _patch_config(field: str, value: str):
     for line in lines:
         if marker in line and "://" not in marker:
             matched = True
-            line    = re.sub(r':\s*"[^"]*"', f': "{value}"', line)
+            if field in BOOLEAN_KEYS:
+                line = re.sub(r':\s*(true|false|\"[^\"]*\")', f': {value}', line)
+            else:
+                line = re.sub(r':\s*"[^"]*"', f': "{value}"', line)
         updated.append(line)
 
     if matched:

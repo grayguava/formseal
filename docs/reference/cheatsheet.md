@@ -16,11 +16,12 @@ fse keygen                    # Generate new keypair (--json for JSON output)
 fse set key <publicKey>       # Set public key in config
 ```
 
-## Endpoint / Origin
+## Endpoint / Origin / Logging
 
 ```bash
 fse set endpoint <url>        # Configure POST endpoint
 fse set origin <name>         # Set form origin identifier
+fse set logging <true|false>  # Toggle info and warning logs (default: true)
 fse --status                 # Show current config
 ```
 

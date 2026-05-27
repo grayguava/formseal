@@ -30,6 +30,9 @@ var FSE = {
     message: "Something went wrong. Please try again.",
   },
 
+  // -- Logging --
+  logging: true,   // set to false to suppress info and warning logs (errors always show)
+
   // -- Fields --
   // Loaded from fields.jsonl at runtime
   fields: FSE_FIELDS,

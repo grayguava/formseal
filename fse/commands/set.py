@@ -21,9 +21,11 @@ def run(args):
         _set_key(cmd_args)
     elif subcommand in ("origin", "o"):
         _set_origin(cmd_args)
+    elif subcommand in ("logging", "log"):
+        _set_logging(cmd_args)
     else:
         fail(f"Unknown: {subcommand}\n" +
-             f"           Use fse set endpoint, fse set key, or fse set origin")
+             f"           Use fse set endpoint, fse set key, fse set origin, or fse set logging")
 
 
 def _set_endpoint(args):
@@ -118,3 +120,17 @@ def _set_origin(args):
     print(f"  {G}✨{R} Updated!")
     rule()
     row("", "origin", value)
+
+
+def _set_logging(args):
+    value = args[0] if args else None
+
+    if not value or value not in ("true", "false"):
+        print(f"  Usage: fse set logging <true|false>")
+        return
+
+    _patch_config("logging", value)
+    br()
+    print(f"  {G}✨{R} Updated!")
+    rule()
+    row("", "logging", value)

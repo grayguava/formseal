@@ -26,10 +26,7 @@ var FSEValidate = (function () {
       }
 
       if (field.maxLength && value.length > field.maxLength) {
-        console.warn(
-          "[fse/validate] Field '" + name + "' exceeds maxLength (" +
-          value.length + " > " + field.maxLength + "). Submission blocked."
-        );
+        FSE_LOG.warn("Field '" + name + "' exceeds maxLength (" + value.length + " > " + field.maxLength + ")", "Increase maxLength in fields.jsonl or shorten the input.");
         errors.push({
           name:    name,
           message: name + " must be " + field.maxLength + " characters or fewer.",

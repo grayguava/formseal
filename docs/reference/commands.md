@@ -27,7 +27,7 @@ Creates a `formseal-embed/` directory with:
 
 ### set
 
-Configure endpoint, public key, and form origin.
+Configure endpoint, public key, form origin, and console logging.
 
 ```bash
 # Interactive mode — prompts until valid
@@ -39,9 +39,13 @@ fse set origin
 fse set endpoint https://your-api.example.com/submit
 fse set key ABcdEfGhIjKlMnOpQrStUvWxYz0123456789_
 fse set origin contact-form
+fse set logging false          # suppress info and warning logs
 ```
 
 Press `Enter` with no input to skip.
+
+When `logging` is `false`, only errors are printed to the console.  
+Defaults to `true`.
 
 ---
 

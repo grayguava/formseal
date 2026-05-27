@@ -17,9 +17,14 @@ var FSEForm = (function () {
   function collectData(formEl, fields) {
     var data = {};
     Object.keys(fields).forEach(function (name) {
-      var input = formEl.querySelector("[name='" + name + "']");
-      if (!input) return;
-      data[name] = input.value.trim();
+      var first = formEl.querySelector("[name='" + name + "']");
+      if (!first) return;
+      if (first.type === "checkbox") {
+        var checked = formEl.querySelectorAll("[name='" + name + "']:checked");
+        data[name] = Array.prototype.map.call(checked, function (cb) { return cb.value; });
+      } else {
+        data[name] = first.value.trim();
+      }
     });
     return data;
   }
@@ -101,13 +106,13 @@ var FSEForm = (function () {
 
     var formEl = document.querySelector(cfg.form);
     if (!formEl) {
-      console.error("[fse/form] Form not found: " + cfg.form);
+      FSE_LOG.error("Form not found — " + cfg.form, "Ensure the form selector in fse.config.js matches an element in your HTML.");
       return;
     }
 
     var submitBtn = document.querySelector(cfg.submit);
     if (!submitBtn) {
-      console.error("[fse/form] Submit button not found: " + cfg.submit);
+      FSE_LOG.error("Submit button not found — " + cfg.submit, "Ensure the submit selector in fse.config.js matches a button element.");
       return;
     }
 
@@ -150,6 +155,7 @@ var FSEForm = (function () {
 
         var responseData = await res.json().catch(function () { return {}; });
 
+        FSE_LOG.info("Submitted | id: " + payload.id + " | ciphertext: " + ciphertext.slice(0, 40) + "...");
         setButtonState(submitBtn, "sent", cfg);
         formEl.reset();
 
@@ -160,7 +166,7 @@ var FSEForm = (function () {
         }
 
       } catch (err) {
-        console.error("[fse/form] Submit error:", err);
+        FSE_LOG.error("Submit failed — " + err.message);
         setButtonState(submitBtn, "idle", cfg);
         setStatus(cfg, cfg.onError.message, true, null);
       }

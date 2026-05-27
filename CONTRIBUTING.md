@@ -65,8 +65,7 @@ formseal-embed/
 │       ├── headers.py         # header(), rule()
 │       └── bodies.py          # br(), row(), ok(), fail(), etc
 ├── docs/                      # End-user documentation
-├── .github/
-│   └── workflows/            # GitHub Actions
+├── .github/workflows/        # GitHub Actions
 ├── pyproject.toml
 └── version.txt               # Source of truth for the version string
 ```
@@ -128,7 +127,7 @@ pipx install -e .            # local dev
 
 ## Reporting issues
 
-Use the GitHub issue templates — they're structured to make sure we get the info needed to help quickly:
+Report bugs via GitHub Issues — include the command you ran, the full error message, and your OS.
 
 - **Bug report** : something isn't working
 - **Documentation issue** : something in the docs is wrong or missing

@@ -12,6 +12,7 @@ def _get_help_groups():
             ("fse set endpoint", "set endpoint"),
             ("fse set key", "set encryption key"),
             ("fse set origin", "set form origin"),
+            ("fse set logging", "toggle console logging"),
             ("fse field add <name>", "add field"),
             ("fse field remove <name>", "remove field"),
             ("fse keygen", "generate X25519 keypair"),
