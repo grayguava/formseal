@@ -8,7 +8,7 @@ Welcome to the formseal-embed documentation.
 |-------|-------------|
 | [Getting Started](./getting-started.md) | Installation and first-time setup |
 | [Concepts → How it works](./concepts/how-it-works.md) | How encryption works |
-| [Concepts → Security](./concepts/security.md) | Security model and guarantees |
+| [Concepts → Security](../.github/SECURITY.md) | Security model and guarantees |
 | [Integration → HTML](./integration/html.md) | Adding forms to your site |
 | [Integration → Fields](./integration/fields.md) | Configuring form fields |
 | [Deployment → Endpoint](./deployment/endpoint.md) | Setting up your POST endpoint |
