@@ -6,13 +6,17 @@ Welcome to the formseal-embed documentation.
 
 | Guide | Description |
 |-------|-------------|
-| [Getting Started](./getting-started.md) | Installation and first-time setup |
-| [Concepts → How it works](./concepts/how-it-works.md) | How encryption works |
-| [Concepts → Security](../.github/SECURITY.md) | Security model and guarantees |
-| [Integration → HTML](./integration/html.md) | Adding forms to your site |
-| [Integration → Fields](./integration/fields.md) | Configuring form fields |
-| [Deployment → Endpoint](./deployment/endpoint.md) | Setting up your POST endpoint |
-| [Deployment → Decryption](./deployment/decryption.md) | Decrypting submissions |
+| [Getting Started](./cli/getting-started.md) | Installation and first-time setup |
+| [CLI → Commands](./cli/commands.md) | Complete command reference |
+| [CLI → Cheatsheet](./cli/cheatsheet.md) | Quick reference for common commands |
+| [CLI → Versioning](./cli/versioning.md) | Payload versioning |
+| [Browser runtime → How it works](./browser-runtime/how-it-works.md) | How encryption works |
+| [Browser runtime → HTML](./browser-runtime/html.md) | Adding forms to your site |
+| [Browser runtime → Fields](./browser-runtime/fields.md) | Configuring form fields |
+| [Browser runtime → JavaScript](./browser-runtime/javascript.md) | Callbacks and events |
+| [Browser runtime → Config](./browser-runtime/config.md) | Full configuration reference |
+| [Decryption](./decryption.md) | Decrypting submissions |
+| [Security](../.github/SECURITY.md) | Security model and guarantees |
 | [Troubleshooting](./troubleshooting.md) | Common issues and solutions |
 
 ## What is formseal-embed?

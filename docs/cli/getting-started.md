@@ -51,14 +51,13 @@ You'll be prompted for your endpoint URL, public key, and form origin. Use `fse 
 <script src="/formseal-embed/globals.js"></script>
 ```
 
-Then add your form markup. See [Integration → HTML](../integration/html.md).
+Then add your form markup. See [Browser runtime → HTML](../browser-runtime/html.md).
 
 ---
 
 ## Read more
 
-- [How it works](./concepts/how-it-works.md)
-- [Integration → HTML](./integration/html.md)
-- [Integration → Fields](./integration/fields.md)
-- [Deployment → Endpoint](./deployment/endpoint.md)
-- [Deployment → Decryption](./deployment/decryption.md)
+- [How it works](../browser-runtime/how-it-works.md)
+- [Browser runtime → HTML](../browser-runtime/html.md)
+- [Browser runtime → Fields](../browser-runtime/fields.md)
+- [Decryption](../decryption.md)

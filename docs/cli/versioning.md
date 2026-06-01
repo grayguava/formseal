@@ -32,5 +32,4 @@ All versions and their schemas are documented in [Schemas](../payload-schemas/RE
 
 ## Decryption
 
-When you decrypt, the `version` field tells your tool which schema to use. See [Decryption](./decryption.md).
-
+When you decrypt, the `version` field tells your tool which schema to use. See [Decryption](../decryption.md).

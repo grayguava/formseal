@@ -37,9 +37,13 @@ fse set origin
 
 # Non-interactive — value provided directly
 fse set endpoint https://your-api.example.com/submit
+fse set ep https://your-api.example.com/submit       # alias
 fse set key ABcdEfGhIjKlMnOpQrStUvWxYz0123456789_
+fse set k ABcdEfGhIjKlMnOpQrStUvWxYz0123456789_     # alias
 fse set origin contact-form
-fse set logging false          # suppress info and warning logs
+fse set o contact-form                                # alias
+fse set logging false                                 # suppress info and warning logs
+fse set log false                                     # alias
 ```
 
 Press `Enter` with no input to skip.
@@ -72,8 +76,10 @@ fse field phone type:tel required:false    # same as fse field add phone type:te
 fse field add name type:text
 fse field add email type:email required:true
 fse field add message type:text required:true maxLength:1000
+fse field add message type:text maxLen:1000            # alias for maxLength
 fse field remove phone
-fse field phone type:tel required:false        # implicit add
+fse field rm phone                                     # alias
+fse field phone type:tel required:false                # implicit add
 ```
 
 ---
@@ -173,6 +179,19 @@ fse --aliases
 | `-r`  | `reset`   |
 | `-f`  | `field`   |
 | `-s`  | `set`     |
+
+---
+
+### Shorthand subcommand aliases
+
+| Alias | Canonical | Command |
+|-------|-----------|---------|
+| `ep`  | `endpoint` | `fse set` |
+| `k`   | `key`      | `fse set` |
+| `o`   | `origin`   | `fse set` |
+| `log` | `logging`  | `fse set` |
+| `a`   | `add`      | `fse field` |
+| `rm`  | `remove`   | `fse field` |
 
 ---
 

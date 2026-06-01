@@ -41,4 +41,4 @@ Nothing is left in plaintext — not the fields, not the metadata.
 
 Decryption happens offline, using your private key. There's no server component. You pull the ciphertext, run the decryptor, and read your submissions.
 
-See [Deployment → Decryption](../deployment/decryption.md).
+See [Decryption](../decryption.md).
