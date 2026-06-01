@@ -13,19 +13,16 @@ fse init
 
 ```bash
 fse keygen                    # Generate new keypair (--json for JSON output)
-fse set key <publicKey>       # Set public key in config (or: fse set k <key>)
-fse set endpoint <url>        # Configure POST endpoint (or: fse set ep <url>)
-fse set origin <name>         # Set form origin identifier (or: fse set o <name>)
-fse set logging <true|false>  # Toggle info and warning logs (or: fse set log <bool>)
+fse set key <publicKey>       # Set public key in config
 ```
 
 ## Endpoint / Origin / Logging
 
 ```bash
-fse set endpoint <url>        # Configure POST endpoint (or: fse set ep <url>)
-fse set key <publicKey>       # Set public key (or: fse set k <key>)
-fse set origin <name>         # Set form origin identifier (or: fse set o <name>)
-fse set logging <true|false>  # Toggle info and warning logs (or: fse set log <bool>)
+fse set endpoint <url>        # Configure POST endpoint
+fse set key <publicKey>       # Set public key
+fse set origin <name>         # Set form origin identifier
+fse set logging <true|false>  # Toggle info and warning logs (default: true)
 fse --status                 # Show current config
 ```
 
@@ -33,7 +30,7 @@ fse --status                 # Show current config
 
 ```bash
 fse field <name> type:<type>         # Add field (implicit, type: text/email/tel)
-fse field add <name> type:<type>     # Add field (explicit, or: fse field a <name>)
+fse field add <name> type:<type>     # Add field (explicit)
 fse field remove <name>              # Remove field (or: fse field rm <name>)
 ```
 
@@ -65,6 +62,6 @@ fse --version              # Show version
 
 | Option | Aliases | Description |
 |--------|---------|-------------|
-| `type:<type>` | `t:<type>` | Field type (`text`, `email`, `tel`) |
+| `type:<type>` | — | Field type (`text`, `email`, `tel`) |
 | `required:<bool>` | — | Mark field as required |
-| `maxLength:<n>` | `maxLen:<n>`, `maxlength:<n>` | Maximum character length |
+| `maxLength:<n>` | `maxLen:<n>` | Maximum character length |

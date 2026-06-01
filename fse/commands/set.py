@@ -15,13 +15,13 @@ def run(args):
             f"           Run fse init first."
         )
 
-    if subcommand in ("endpoint", "ep"):
+    if subcommand == "endpoint":
         _set_endpoint(cmd_args)
-    elif subcommand in ("key", "k"):
+    elif subcommand == "key":
         _set_key(cmd_args)
-    elif subcommand in ("origin", "o"):
+    elif subcommand == "origin":
         _set_origin(cmd_args)
-    elif subcommand in ("logging", "log"):
+    elif subcommand == "logging":
         _set_logging(cmd_args)
     else:
         fail(f"Unknown: {subcommand}\n" +

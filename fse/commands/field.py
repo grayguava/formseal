@@ -18,9 +18,9 @@ def run(args):
             f"           Run fse init first."
         )
 
-    if action in ("add", "a"):
+    if action == "add":
         _field_add(cmd_args)
-    elif action in ("remove", "rm", "r"):
+    elif action in ("remove", "rm"):
         _field_remove(cmd_args)
     else:
         _field_add(args)
@@ -41,12 +41,12 @@ def _field_add(args):
             k, v = opt.split(":", 1)
             if k == "required":
                 field["required"] = v.lower() == "true"
-            elif k in ("maxLen", "maxlength", "maxLength"):
+            elif k in ("maxLen", "maxLength"):
                 try:
                     field["maxLength"] = int(v)
                 except ValueError:
                     fail(f"Invalid maxLen: {v}")
-            elif k in ("type", "t"):
+            elif k == "type":
                 if v not in VALID_TYPES:
                     fail(f"Invalid type: {v}. Valid types: {', '.join(VALID_TYPES)}")
                 field["type"] = v

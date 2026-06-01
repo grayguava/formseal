@@ -2,6 +2,7 @@ ALIASES = {
     "-i":  ["init"],
     "-r":  ["reset"],
     "-f":  ["field"],
+    "-s":  ["set"],
 }
 
 def resolve(args):

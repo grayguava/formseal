@@ -49,7 +49,7 @@ fse set origin
 fse --status
 ```
 
-See [Getting started](./docs/getting-started.md) for key generation.
+See [Getting started](./docs/cli/getting-started.md) for key generation.
 
 ---
 
@@ -186,14 +186,16 @@ These are intentional.
 
 ## Documentation
 
-- [Getting started](/docs/getting-started.md)
-- [Concepts → How it works](/docs/concepts/how-it-works.md)
-- [Concepts → Security](/docs/concepts/security.md)
-- [Integration → HTML](/docs/integration/html.md)
-- [Integration → Fields](/docs/integration/fields.md)
-- [Integration → JavaScript](/docs/integration/javascript.md)
-- [Deployment → Endpoint](/docs/deployment/endpoint.md)
-- [Deployment → Decryption](/docs/deployment/decryption.md)
+- [Getting started](/docs/cli/getting-started.md)
+- [CLI → Commands](/docs/cli/commands.md)
+- [CLI → Cheatsheet](/docs/cli/cheatsheet.md)
+- [Browser runtime → How it works](/docs/browser-runtime/how-it-works.md)
+- [Browser runtime → HTML](/docs/browser-runtime/html.md)
+- [Browser runtime → Fields](/docs/browser-runtime/fields.md)
+- [Browser runtime → JavaScript](/docs/browser-runtime/javascript.md)
+- [Browser runtime → Config](/docs/browser-runtime/config.md)
+- [Decryption](/docs/decryption.md)
+- [Security](/.github/SECURITY.md)
 
 ---
 
