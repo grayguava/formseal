@@ -1,3 +1,5 @@
+# commands/version — Version display
+
 VERSION = "3.9.1"
 
 def run():

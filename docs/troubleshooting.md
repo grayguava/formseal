@@ -19,8 +19,6 @@ pip show formseal-embed
 # macOS/Linux: Typically added automatically via pip
 ```
 
----
-
 ## 2. Configuration issues
 
 ### "endpoint must use https"
@@ -42,8 +40,6 @@ fse set endpoint https://your-api.example.com/submit
 ```bash
 fse keygen
 ```
-
----
 
 ## 3. Field configuration issues
 
@@ -69,8 +65,6 @@ fse keygen
 **Cause**: Using a type not supported.
 
 **Solution**: Use only: `text`, `email`, `textarea`, `number`, `tel`.
-
----
 
 ## 4. Browser integration issues
 
@@ -100,8 +94,6 @@ fse keygen
 <span data-fse-error="email"></span>
 ```
 
----
-
 ## 5. Submission issues
 
 ### Endpoint not receiving data
@@ -126,8 +118,6 @@ fse keygen
 
 **Solution**: Temporarily set `logging: true` (or run `fse set logging true`) to see warnings and info. Only errors appear when `logging` is off.
 
----
-
 ## 6. Keyboard interrupt
 
 ### Ctrl+C during interactive prompt
@@ -135,8 +125,6 @@ fse keygen
 **Behavior**: Prompt cancels gracefully, no changes made.
 
 This is intentional — you can safely interrupt at any prompt.
-
----
 
 ## 7. Still stuck?
 

@@ -2,8 +2,6 @@
 
 The entire payload (including the version field) is encrypted. Storage sees only opaque ciphertext — nothing is readable until decrypted with your private key.
 
----
-
 ## Current version
 
 `fse.v1.0`
@@ -18,8 +16,6 @@ The entire payload (including the version field) is encrypted. Storage sees only
 }
 ```
 
----
-
 ## Version support
 
 | Version | Status |
@@ -27,8 +23,6 @@ The entire payload (including the version field) is encrypted. Storage sees only
 | `fse.v1.0` | current |
 
 All versions and their schemas are documented in [Schemas](../payload-schemas/README.md).
-
----
 
 ## Decryption
 

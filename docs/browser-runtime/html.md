@@ -2,8 +2,6 @@
 
 formseal-embed renders no markup. You write the form; formseal connects to it via selectors.
 
----
-
 ## Required
 
 **A form with an ID**
@@ -29,8 +27,6 @@ Matches `FSE.submit` (default: `#contact-submit`). formseal controls its disable
 <input name="email">
 <textarea name="message"></textarea>
 ```
-
----
 
 ## Optional
 
@@ -58,8 +54,6 @@ Matches `FSE.status` (default: `#contact-status`). Receives success and error me
 ```
 
 Place it before `</body>`.
-
----
 
 ## Full example
 
@@ -91,8 +85,6 @@ Place it before `</body>`.
 <script src="/formseal-embed/globals.js"></script>
 ```
 
----
-
 ## Selector reference
 
 | Config key | Default | Matches |
@@ -112,8 +104,6 @@ var FSE = {
   status: "#msg-box",
 };
 ```
-
----
 
 ## Accessibility
 

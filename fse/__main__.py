@@ -1,3 +1,4 @@
-from fse.cli import main
+# __main__ — python -m fse support
 
+from fse.cli import main
 main()

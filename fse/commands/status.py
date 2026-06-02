@@ -1,8 +1,12 @@
+# commands/status — Show current configuration and fields
+
 import json
 import re
+from pathlib import Path
 
-from fse.ui import br, header, warn, D, W, R, GRAY
-from fse.helpers.config import DEST
+from fse.ui import br, header, warn, C, D, W, R, GRAY
+
+DEST = Path.cwd() / "formseal-embed"
 
 
 def run(args=None):
@@ -13,7 +17,7 @@ def run(args=None):
     config_path = DEST / "config" / "fse.config.js"
 
     if not config_path.exists():
-        warn("formseal-embed not initialized. Run fse init first.")
+        warn(f"formseal-embed not initialized. {C}Run fse init first.{R}")
         br()
         return
 
@@ -46,7 +50,7 @@ def run(args=None):
         row("Total Fields:", "0", GRAY)
 
     br()
-    print(f"  {D}Run `fse --status -fields` to see configured fields.{R}")
+    print(f"  Run {C}fse status -fields{R} to see configured fields.")
     br()
 
 

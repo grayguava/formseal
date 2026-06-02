@@ -1,3 +1,5 @@
+# commands/about — About command (show project info)
+
 from fse.ui import br, header, C, G, W, R
 
 

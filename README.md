@@ -46,7 +46,7 @@ fse init
 fse set endpoint
 fse set key
 fse set origin
-fse --status
+fse status
 ```
 
 See [Getting started](./docs/cli/getting-started.md) for key generation.

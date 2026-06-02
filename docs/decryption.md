@@ -2,15 +2,11 @@
 
 Use `formseal-decrypt` to decrypt ciphertexts locally.
 
----
-
 ## Installation
 
 ```bash
 pipx install formseal-decrypt
 ```
-
----
 
 ## Quick start
 
@@ -19,12 +15,8 @@ fsd connect
 fsd decrypt
 ```
 
----
-
 ## Output
 
-Decrypted files are saved as `formseal.decrypted.jsonl` (or `.json` if you choose pretty format during setup).
-
----
+Decrypted files are saved as `formseal.decrypted.jsonl` (canonical JSONL) plus any format requested via `--format`.
 
 For full documentation, see the [formseal-decrypt repo](https://github.com/useFormseal/decrypt).

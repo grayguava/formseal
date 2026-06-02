@@ -1,12 +1,11 @@
-# fse/cli/ui/headers.py
-# Header and rule functions
+# ui/headers — Header and rule rendering
 
-from fse.ui.styles import C, G, R, W, Y, HEAD
+from fse.ui.styles import C, D, G, R, W, HEAD
 
 
 def header(title=""):
     if title:
-        print(f"{C} \u250c\u2500 {HEAD} {R}{W}formseal-embed{R}  {Y}{title}{R}")
+        print(f"{C} \u250c\u2500 {HEAD} {R}{W}formseal-embed{R}   {D}\\{R}   {W}{title}{R}")
     else:
         print(f"{C} \u250c\u2500 {HEAD} {R}{W}formseal-embed{R}")
     print(G + " " + "\u2500" * 52 + R)

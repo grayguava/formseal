@@ -1,5 +1,4 @@
-# fse/cli/ui/styles.py
-# All ANSI colors and styles
+# ui/styles — ANSI color and style constants
 
 import os
 import sys
@@ -28,6 +27,7 @@ MAGENTA= "\x1b[35m"
 CYAN   = "\x1b[36m"
 WHITE  = "\x1b[37m"
 GRAY   = "\x1b[90m"
+ERROR  = "\x1b[38;5;196m"
 
 O = "\x1b[38;5;208m"
 S = "\x1b[38;5;112m"
@@ -42,6 +42,3 @@ R = RESET
 
 HEAD = "🦨"
 OK = "✨"
-TICK = "✔"
-CROSS = "✖"
-XFATAL = "❌"

@@ -1,3 +1,5 @@
+# commands/keygen — Generate X25519 keypair
+
 import base64
 import json
 
@@ -19,7 +21,7 @@ def run(args=None):
 
     print(f"  {G}✨{R} Generated keypair!\n")
 
-    if args and "--json" in args:
+    if args and "-json" in args:
         output = {
             "publicKey": public_b64,
             "privateKey": private_b64,

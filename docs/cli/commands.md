@@ -23,8 +23,6 @@ Creates a `formseal-embed/` directory with:
 - `config/fields.jsonl` — field definitions
 - `globals.js` — client-side encryption library
 
----
-
 ### set
 
 Configure endpoint, public key, form origin, and console logging.
@@ -46,8 +44,6 @@ Press `Enter` with no input to skip.
 
 When `logging` is `false`, only errors are printed to the console.  
 Defaults to `true`.
-
----
 
 ### field
 
@@ -78,15 +74,13 @@ fse field rm phone                                     # alias
 fse field phone type:tel required:false                # implicit add (no "add" keyword)
 ```
 
----
-
 ### keygen
 
 Generate a new X25519 keypair for form encryption.
 
 ```bash
 fse keygen
-fse keygen --json           # machine-readable JSON output
+fse keygen -json            # machine-readable JSON output
 ```
 
 Default output (human-readable):
@@ -96,7 +90,7 @@ Default output (human-readable):
     Private key:     zyxwvutsrqponmlkjihgfedcba0987654321_
 ```
 
-With `--json`:
+With `-json`:
 
 ```json
 {
@@ -107,8 +101,6 @@ With `--json`:
 
 **WARNING:** Keep both keys safe. The private key is needed to decrypt submissions — loss means permanent data loss.
 
----
-
 ### reset
 
 Remove and re-scaffold.
@@ -117,18 +109,14 @@ Remove and re-scaffold.
 fse reset
 ```
 
----
-
-### --status
+### status
 
 Show current configuration.
 
 ```bash
-fse --status
-fse --status -fields       # also show per-field details
+fse status
+fse status -fields       # also show per-field details
 ```
-
----
 
 ### --help
 
@@ -138,8 +126,6 @@ Show help information.
 fse --help
 ```
 
----
-
 ### --version
 
 Show version number.
@@ -148,18 +134,6 @@ Show version number.
 fse --version
 fse version
 ```
-
----
-
-### --about
-
-Show project information.
-
-```bash
-fse --about
-```
-
----
 
 ### --aliases
 
@@ -175,8 +149,6 @@ fse --aliases
 | `-r`  | `reset`   |
 | `-f`  | `field`   |
 | `-s`  | `set`     |
-
----
 
 ## Shorthand flags
 

@@ -1,13 +1,30 @@
-import json
+# commands/field — Add and remove form fields
 
-from fse.ui import br, row, G, W, R, fail
-from fse.helpers.config import FIELDS_PATH
-from fse.helpers.fields import VALID_TYPES
+import json
+from pathlib import Path
+
+from fse.ui import br, row, C, G, W, R, fail
+
+FIELDS_PATH = Path.cwd() / "formseal-embed" / "config" / "fields.jsonl"
+
+FIELD_TYPES = {
+    "text": {
+        "validate": None,
+    },
+    "email": {
+        "validate": r"^[^\s@]+@[^\s@]+\.[^\s@]+$",
+    },
+    "tel": {
+        "validate": r"^\+?[\d\s\-().]{6,20}$",
+    },
+}
+
+VALID_TYPES = tuple(FIELD_TYPES.keys())
 
 
 def run(args):
     if not args:
-        fail("Usage: fse field <add|remove> [opts]")
+        fail(f"Usage: {C}fse field <add|remove> [opts]{R}")
 
     action = args[0]
     cmd_args = args[1:]
@@ -15,7 +32,7 @@ def run(args):
     if not FIELDS_PATH.exists():
         fail(
             "formseal-embed/config/fields.jsonl not found.\n"
-            f"           Run fse init first."
+            f"           {C}Run fse init first.{R}"
         )
 
     if action == "add":
@@ -28,7 +45,7 @@ def run(args):
 
 def _field_add(args):
     if not args:
-        fail("Usage: fse field add <name> type:<type>")
+        fail(f"Usage: {C}fse field add <name> type:<type>{R}")
 
     name = args[0]
     fields = _load_fields_jsonl()
@@ -67,7 +84,7 @@ def _field_add(args):
 
 def _field_remove(args):
     if not args:
-        fail("Usage: fse field remove <name>")
+        fail(f"Usage: {C}fse field remove <name>{R}")
 
     name = args[0]
     fields = _load_fields_jsonl()

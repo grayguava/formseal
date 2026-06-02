@@ -12,7 +12,7 @@ fse init
 ## Keys
 
 ```bash
-fse keygen                    # Generate new keypair (--json for JSON output)
+fse keygen                    # Generate new keypair (-json for JSON output)
 fse set key <publicKey>       # Set public key in config
 ```
 
@@ -23,7 +23,7 @@ fse set endpoint <url>        # Configure POST endpoint
 fse set key <publicKey>       # Set public key
 fse set origin <name>         # Set form origin identifier
 fse set logging <true|false>  # Toggle info and warning logs (default: true)
-fse --status                 # Show current config
+fse status                  # Show current config
 ```
 
 ## Fields
@@ -37,8 +37,8 @@ fse field remove <name>              # Remove field (or: fse field rm <name>)
 ## Status
 
 ```bash
-fse --status                # Show current config
-fse --status -fields       # Show config with per-field details
+fse status                  # Show current config
+fse status -fields         # Show config with per-field details
 ```
 
 ## Help

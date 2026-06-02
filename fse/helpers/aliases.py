@@ -1,3 +1,5 @@
+# helpers/aliases — Command alias resolution
+
 ALIASES = {
     "-i":  ["init"],
     "-r":  ["reset"],

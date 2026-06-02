@@ -1,1 +1,1 @@
-# fse/__init__.py
+# fse — Package root

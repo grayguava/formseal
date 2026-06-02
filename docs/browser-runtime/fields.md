@@ -2,8 +2,6 @@
 
 Fields define what to collect and how to validate it. They live in `fields.jsonl` and must match the `name` attributes on your form inputs.
 
----
-
 ## Defining fields
 
 Fields are defined in JSONL format (one JSON object per line):
@@ -22,8 +20,6 @@ Fields are defined in JSONL format (one JSON object per line):
 
 The key must exactly match the HTML `name`. Inputs without a matching field key are ignored.
 
----
-
 ## Options
 
 | Option | Type | Description |
@@ -33,8 +29,6 @@ The key must exactly match the HTML `name`. Inputs without a matching field key 
 | `maxLength` | number | Blocks submission if value exceeds this |
 
 `type` is required for each field. `text` accepts any input (no format validation).
-
----
 
 ## CLI
 

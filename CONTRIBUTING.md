@@ -45,16 +45,16 @@ formseal-embed/
 │   ├── cli.py                 # Entry point, dispatch
 │   ├── __main__.py            # python -m fse support
 │   ├── src/                   # Client-side JavaScript (scaffold source)
-│   ├── commands/              # CLI commands (flat)
+│   ├── commands/              # CLI commands
 │   │   ├── init.py            # fse init
 │   │   ├── reset.py           # fse reset
 │   │   ├── set.py             # fse set endpoint / key / origin
 │   │   ├── field.py           # fse field add / remove
 │   │   ├── keygen.py          # fse keygen
-│   │   ├── about.py           # fse --about
+│   │   ├── about.py           # fse (no args)
 │   │   ├── version.py         # fse --version
 │   │   ├── help.py            # fse --help
-│   │   └── status.py          # fse --status
+│   │   └── status.py          # fse status
 │   ├── helpers/               # Shared logic
 │   │   ├── config.py          # Paths, patching, validation
 │   │   ├── errors.py          # Error handlers
@@ -114,7 +114,7 @@ fse                          # check about displays correctly
 fse init                     # scaffold a project
 fse set endpoint             # interactive endpoint config
 fse set key                  # interactive key config
-fse --status                 # show current config
+fse status                   # show current config
 fse field add email type:email  # add a field
 ```
 

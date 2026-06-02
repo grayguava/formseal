@@ -1,7 +1,5 @@
 # JavaScript
 
----
-
 ## Callbacks
 
 Define `window.fseCallbacks` before the formseal script tag to hook into form events.
@@ -22,8 +20,6 @@ Define `window.fseCallbacks` before the formseal script tag to hook into form ev
 
 `onSuccess` fires after a successful POST. `onError` fires on network failure — not on validation errors, which are handled inline.
 
----
-
 ## Skipping the status element
 
 If you want full control over messaging, set `status: null` and handle everything in callbacks:
@@ -33,8 +29,6 @@ var FSE = {
   status: null,
 };
 ```
-
----
 
 ## Event reference
 

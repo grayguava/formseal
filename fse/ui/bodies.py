@@ -1,7 +1,6 @@
-# fse/cli/ui/bodies.py
-# Body output functions
+# ui/bodies — Body text output (fail, neutral, ok, info, warn)
 
-from fse.ui.styles import D, G, O, R, S, W, Y, XFATAL
+from fse.ui.styles import D, ERROR, G, O, R, S, W, Y
 
 
 def br():
@@ -10,8 +9,13 @@ def br():
 
 def fail(msg):
     br()
-    print(f"{XFATAL} {msg}")
+    print(f" {ERROR}Error:{R} {msg}")
+    raise SystemExit(1)
+
+
+def neutral(msg):
     br()
+    print(f" \U0001f610 {msg}")
     raise SystemExit(1)
 
 
@@ -30,4 +34,4 @@ def info(msg):
 
 
 def warn(msg):
-    print(f"{Y}⚠ {R}{msg}")
+    print(f"  {Y}⚠️ {R}{msg}")

@@ -1,8 +1,9 @@
-from fse.ui import fail, br
+# helpers/errors — Error handler functions
 
-def unknown_command(cmd):
-    br()
-    fail(f"Unknown command: {cmd}\nRun 'fse --help' for available commands")
+from fse.ui import br, fail, neutral, C, WHITE, R
+
+def unknown_command():
+    neutral(f"{WHITE}This command doesn't exist. Run {C}fse --help{R}{WHITE} for available commands.{R}")
 
 def handle_interrupt():
     from fse.ui import info
@@ -11,5 +12,4 @@ def handle_interrupt():
     br()
 
 def handle_exception(e):
-    from fse.ui import fail
     fail(str(e))

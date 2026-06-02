@@ -1,7 +1,12 @@
+# commands/reset — Remove and re-scaffold formseal-embed project
+
 import shutil
+from pathlib import Path
 
 from fse.ui import br, ok
-from fse.helpers.config import SRC, DEST
+
+SRC = Path(__file__).resolve().parent.parent / "src"
+DEST = Path.cwd() / "formseal-embed"
 
 
 def run(_=None):

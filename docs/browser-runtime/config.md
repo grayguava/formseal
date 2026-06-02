@@ -2,8 +2,6 @@
 
 Complete reference of all `FSE` config keys. Values come from `config/fse.config.js`.
 
----
-
 ## Endpoint & Identity
 
 | Key | Default | Description |
@@ -14,8 +12,6 @@ Complete reference of all `FSE` config keys. Values come from `config/fse.config
 
 Set via `fse set endpoint`, `fse set key`, `fse set origin`.
 
----
-
 ## Form Selectors
 
 | Key | Default | Description |
@@ -25,15 +21,11 @@ Set via `fse set endpoint`, `fse set key`, `fse set origin`.
 
 See [HTML](./html.md) for markup requirements.
 
----
-
 ## Status Element
 
 | Key | Default | Description |
 |---|---|---|
 | `status` | `"#contact-status"` | CSS selector for the status message element. Set to `null` to disable and use [callbacks](./javascript.md) instead. |
-
----
 
 ## Submit Button States
 
@@ -43,8 +35,6 @@ See [HTML](./html.md) for markup requirements.
 | `submitStates.sending` | `"Sending..."` | Button text while submitting (button is disabled). |
 | `submitStates.sent` | `"Sent"` | Button text after successful submission. |
 
----
-
 ## Success Behavior
 
 | Key | Default | Description |
@@ -53,15 +43,11 @@ See [HTML](./html.md) for markup requirements.
 | `onSuccess.redirectUrl` | `"/thank-you"` | URL to redirect to on success. |
 | `onSuccess.message` | `"Thanks! Your message has been sent."` | Text shown in the status element on success. |
 
----
-
 ## Error Behavior
 
 | Key | Default | Description |
 |---|---|---|
 | `onError.message` | `"Something went wrong. Please try again."` | Text shown in the status element on network/POST failure. |
-
----
 
 ## Logging
 
@@ -70,8 +56,6 @@ See [HTML](./html.md) for markup requirements.
 | `logging` | `true` | Set to `false` to suppress info and warning console logs. Errors always show. |
 
 Set via `fse set logging true|false`.
-
----
 
 ## Fields
 

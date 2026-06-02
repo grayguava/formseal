@@ -1,20 +1,6 @@
-# Security policy
+# Security
 
-## Supported versions
-
-Only the latest published release receives security updates.
-
-## Reporting vulnerabilities
-
-Report vulnerabilities privately via the **"Report a vulnerability"** button on this repo's `Security` tab.
-
-**Do not** open a public issue.
-
-Include a description, steps to reproduce, and potential impact.
-
-## Response process
-
-This is an independently maintained open source project. Response times are not guaranteed, but security reports will be reviewed as soon as possible. Please allow reasonable time before public disclosure.
+Report vulnerabilities privately via the **"Report a vulnerability"** button on this repo's `Security` tab. Do not open a public issue. Include a description, steps to reproduce, and potential impact.
 
 ## What formseal-embed protects
 

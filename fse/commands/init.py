@@ -1,14 +1,19 @@
-import shutil
+# commands/init — Scaffold a new formseal-embed project
 
-from fse.ui import br, ok, fail, W, R
-from fse.helpers.config import SRC, DEST
+import shutil
+from pathlib import Path
+
+from fse.ui import br, ok, fail, C, R
+
+SRC = Path(__file__).resolve().parent.parent / "src"
+DEST = Path.cwd() / "formseal-embed"
 
 
 def run(_=None):
     if DEST.exists():
         fail(
             "./formseal-embed/ already exists.\n"
-            f"           Use {W}fse reset{R} to remove and re-scaffold."
+            f"           Use {C}fse reset{R} to remove and re-scaffold."
         )
 
     shutil.copytree(SRC, DEST)

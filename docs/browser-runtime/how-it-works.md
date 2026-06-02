@@ -1,7 +1,5 @@
 # How it works
 
----
-
 ## The flow
 
 1. User submits the form
@@ -12,8 +10,6 @@
 6. You decrypt locally using your private key
 
 Steps 1–5 happen automatically. Step 6 is on your schedule.
-
----
 
 ## What gets encrypted
 
@@ -34,8 +30,6 @@ The entire payload is a single encrypted blob:
 ```
 
 Nothing is left in plaintext — not the fields, not the metadata.
-
----
 
 ## Decryption
 

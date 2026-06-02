@@ -1,9 +1,6 @@
-import sys
-from pathlib import Path
+# cli — Entry point and command registry
 
-script_dir = Path(__file__).absolute()
-project_root = script_dir.parent
-sys.path.insert(0, str(project_root))
+import sys
 
 from fse.helpers.aliases import resolve
 from fse.helpers.errors import unknown_command, handle_interrupt, handle_exception
@@ -25,15 +22,7 @@ COMMANDS = {
     "field":  ("Add/remove fields", cmd_field.run),
     "set":    ("Configure endpoint/key", cmd_set.run),
     "keygen": ("Generate X25519 keypair", cmd_keygen.run),
-}
-
-SPECIAL = {
-    "--help":     cmd_help.run,
-    "--about":    cmd_about.run,
-    "--version":  cmd_version.run,
-    "version":    cmd_version.run,
-    "--aliases":  cmd_help.run_aliases,
-    "--status":   cmd_status.run,
+    "status": ("Show current config", cmd_status.run),
 }
 
 
@@ -46,15 +35,20 @@ def main():
     cmd = args[0].lower()
     cmd_args = args[1:]
 
-    if cmd in SPECIAL:
-        if cmd == "--status":
-            SPECIAL[cmd](cmd_args)
-        else:
-            SPECIAL[cmd]()
+    if cmd == "--help":
+        cmd_help.run()
+        return
+
+    if cmd == "--version" or cmd == "version":
+        cmd_version.run()
+        return
+
+    if cmd == "--aliases":
+        cmd_help.run_aliases()
         return
 
     if cmd not in COMMANDS:
-        unknown_command(cmd)
+        unknown_command()
 
     _, handler = COMMANDS[cmd]
 

@@ -1,10 +1,78 @@
-from fse.ui import br, row, W, R, G, GRAY, CROSS, fail, rule
-from fse.helpers.config import _normalize_endpoint, _patch_config, _validate_key, CONFIG_PATH, _prompt
+# commands/set — Configure endpoint, key, origin, and logging
+
+import base64
+import re
+from pathlib import Path
+
+from fse.ui import br, row, neutral, warn, C, WHITE, W, R, G, GRAY, D, fail, rule
+
+CONFIG_PATH = Path.cwd() / "formseal-embed" / "config" / "fse.config.js"
+
+MARKERS = {
+    "endpoint":  "endpoint:",
+    "publicKey": "publicKey:",
+    "key":       "publicKey:",
+    "origin":    "origin:",
+    "logging":   "logging:",
+}
+
+BOOLEAN_KEYS = {"logging"}
+
+
+def _prompt(label: str) -> str:
+    try:
+        return input(f"  {D}{label}{R}: ").strip()
+    except (KeyboardInterrupt, EOFError):
+        br()
+        return ""
+
+
+def _normalize_endpoint(url: str) -> str:
+    url = url.strip()
+    if url.startswith("https://"):
+        return url
+    if url.startswith("http://"):
+        return url.replace("http://", "https://", 1)
+    return "https://" + url
+
+
+def _patch_config(field: str, value: str):
+    marker = MARKERS.get(field)
+    if not marker or not value:
+        return False
+
+    if not CONFIG_PATH.exists():
+        return False
+
+    lines   = CONFIG_PATH.read_text(encoding="utf-8").splitlines(keepends=True)
+    matched = False
+    updated = []
+
+    for line in lines:
+        if marker in line and "://" not in marker:
+            matched = True
+            if field in BOOLEAN_KEYS:
+                line = re.sub(r':\s*(true|false|\"[^\"]*\")', f': {value}', line)
+            else:
+                line = re.sub(r':\s*"[^"]*"', f': "{value}"', line)
+        updated.append(line)
+
+    if matched:
+        CONFIG_PATH.write_text("".join(updated), encoding="utf-8")
+    return matched
+
+
+def _validate_key(key):
+    try:
+        decoded = base64.urlsafe_b64decode(key + "==")
+        return len(decoded) == 32
+    except Exception:
+        return False
 
 
 def run(args):
     if not args:
-        fail("Usage: fse set <endpoint|key|origin> [value]")
+        fail(f"{WHITE}Usage:{R} {C}fse set <endpoint|key|origin> [value]{R}")
 
     subcommand = args[0]
     cmd_args = args[1:]
@@ -12,7 +80,7 @@ def run(args):
     if not CONFIG_PATH.exists():
         fail(
             "formseal-embed/config/fse.config.js not found.\n"
-            f"           Run fse init first."
+            f"           {C}Run fse init first.{R}"
         )
 
     if subcommand == "endpoint":
@@ -25,7 +93,7 @@ def run(args):
         _set_logging(cmd_args)
     else:
         fail(f"Unknown: {subcommand}\n" +
-             f"           Use fse set endpoint, fse set key, fse set origin, or fse set logging")
+             f"           Use {C}fse set endpoint{R}, {C}fse set key{R}, {C}fse set origin{R}, or {C}fse set logging{R}")
 
 
 def _set_endpoint(args):
@@ -40,12 +108,11 @@ def _set_endpoint(args):
     url = _normalize_endpoint(original)
 
     if not url.startswith("https://"):
-        print(f"{CROSS} Endpoint must use HTTPS")
-        return
+        neutral("Endpoint must use HTTPS.")
 
     if not original.startswith("http://") and not original.startswith("https://"):
         br()
-        print(f"  {GRAY}ℹ  No protocol provided — using https://{R}")
+        warn("No protocol provided — using https://")
 
     _patch_config("endpoint", url)
     br()
@@ -64,10 +131,10 @@ def _prompt_loop_endpoint():
         url = _normalize_endpoint(value)
         if url.startswith("https://"):
             if value != url:
-                print(f"  {GRAY}ℹ  No protocol provided — using https://{R}")
+                warn("No protocol provided — using https://")
             return url
 
-        print(f"{CROSS} Endpoint must use HTTPS")
+        print(f"  {GRAY}Endpoint must use HTTPS.{R}")
 
 
 def _set_key(args):
@@ -79,11 +146,7 @@ def _set_key(args):
             return
 
     if not _validate_key(value):
-        br()
-        print(f"{CROSS}  Invalid public key")
-        print(f"  Expected raw 32-byte X25519 public key in base64url format")
-        br()
-        return
+        neutral("Invalid public key. Expected raw 32-byte X25519 public key in base64url format.")
 
     _patch_config("key", value)
     br()
@@ -102,8 +165,7 @@ def _prompt_loop_key():
         if _validate_key(value):
             return value
 
-        print(f"{CROSS}  Invalid public key")
-        print(f"  Expected raw 32-byte X25519 public key in base64url format")
+        print(f"  {GRAY}Invalid public key. Expected raw 32-byte X25519 public key in base64url format.{R}")
 
 
 def _set_origin(args):
@@ -126,8 +188,7 @@ def _set_logging(args):
     value = args[0] if args else None
 
     if not value or value.lower() not in ("true", "false"):
-        print(f"  Usage: fse set logging <true|false>")
-        return
+        neutral(f"{WHITE}Usage:{R} {C}fse set logging <true|false>{R}.")
 
     _patch_config("logging", value.lower())
     br()
