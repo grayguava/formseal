@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "formseal-embed"
-version = "3.9.1"
+version = "3.10.0"
 description = "Client-side form encryption that encrypts submissions before they leave the browser and works with any POST endpoint."
 readme = "README.md"
 license = {file = "LICENSE"}
