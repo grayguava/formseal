@@ -23,7 +23,7 @@ fse init
 
 Creates a `formseal-embed/` directory in your project.
 
-### 2. Generate keys
+### 3. Generate keys
 
 ```bash
 fse keygen
@@ -31,7 +31,7 @@ fse keygen
 
 This outputs your public/private key pair. Store the private key somewhere safe — you'll need it to decrypt submissions.
 
-### 3. Configure
+### 4. Configure
 
 ```bash
 fse set endpoint
@@ -41,7 +41,7 @@ fse set origin
 
 You'll be prompted for your endpoint URL, public key, and form origin. Use `fse status` to check your config. Add `-fields` to see per-field details.
 
-### 4. Add to your page
+### 5. Add to your page
 
 ```html
 <script src="/formseal-embed/globals.js"></script>

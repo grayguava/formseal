@@ -42,3 +42,4 @@ R = RESET
 
 HEAD = "🦨"
 OK = "✨"
+BORDER = "\u2500" * 52

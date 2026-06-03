@@ -129,7 +129,7 @@ This is intentional — you can safely interrupt at any prompt.
 ## 7. Still stuck?
 
 1. Check [GitHub Issues](https://github.com/useFormseal/embed/issues)
-3. Open a new issue with:
+2. Open a new issue with:
    - Command you ran
    - Full error message
    - OS and version (`fse --version`)
