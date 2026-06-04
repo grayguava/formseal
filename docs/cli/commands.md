@@ -150,11 +150,3 @@ fse --aliases
 | `-f`  | `field`   |
 | `-s`  | `set`     |
 
-## Shorthand flags
-
-| Flag | Description |
-|------|-------------|
-| `-i` | Scaffold project (same as `fse init`) |
-| `-r` | Re-scaffold (same as `fse reset`) |
-| `-f` | Field management (same as `fse field`) |
-| `-s` | Configure endpoint/key (same as `fse set`) |

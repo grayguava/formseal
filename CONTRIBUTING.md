@@ -127,8 +127,17 @@ pipx install -e .            # local dev
 
 ## Reporting issues
 
-Report bugs via GitHub Issues — include the command you ran, the full error message, and your OS.
+Report bugs via [GitHub Issues](https://github.com/useFormseal/embed/issues/new).
 
-- **Bug report** : something isn't working
-- **Documentation issue** : something in the docs is wrong or missing
-- **Question / support** : need help with setup or usage
+Please include:
+- Steps to reproduce
+- Expected vs actual behavior
+- Your OS and Python version
+
+---
+
+## Security
+
+If you find a security vulnerability, please report it privately via GitHub Security Advisories.
+
+**Do NOT** open a public issue for security vulnerabilities.

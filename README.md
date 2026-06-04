@@ -1,5 +1,3 @@
-# formseal-embed
-
 <p align="center">
   <img src="fse.png" alt="formseal-embed">
 </p>
@@ -15,13 +13,13 @@
   A server-blind, browser-native encrypted form poster.
 </p>
 
----
+
 
 Form submissions are encrypted in the browser using X25519 sealed boxes before reaching your endpoint. The backend stores ciphertext prefixed with `formseal.`. Decryption is operator-controlled.
 
 formseal-embed is not a hosted service, dashboard, or SaaS. It is a drop-in client-side utility.
 
----
+
 
 ## Installation
 
@@ -37,7 +35,7 @@ pipx install formseal-embed
 pip install formseal-embed
 ```
 
----
+
 
 ## Quick start
 
@@ -51,7 +49,7 @@ fse status
 
 See [Getting started](./docs/cli/getting-started.md) for key generation.
 
----
+
 
 ## How it works
 
@@ -74,15 +72,27 @@ On submit, formseal:
 
 Your endpoint stores the ciphertext. Only the holder of the private key can decrypt.
 
----
+
+
+## Commands
+
+| Command | Description |
+|---------|-------------|
+| `fse` | Show about / info |
+| `fse init` | Scaffold formseal-embed into your project |
+| `fse set` | Configure endpoint, public key, origin |
+| `fse field` | Manage form fields |
+| `fse keygen` | Generate an X25519 key pair |
+| `fse status` | Show current configuration |
+| `fse reset` | Remove and re-scaffold |
+
+Run `fse --help` for all options.
 
 ## Security guarantee
 
 > If the endpoint is fully compromised, seized, or maliciously operated, previously submitted form data remains confidential.
 
 Encryption happens in the browser. The backend stores ciphertext only. Decryption keys never exist in the backend environment. A backend compromise yields no recoverable plaintext.
-
----
 
 ## Wire up your HTML
 
@@ -119,7 +129,7 @@ Encryption happens in the browser. The backend stores ciphertext only. Decryptio
 <script src="/formseal-embed/globals.js"></script>
 ```
 
----
+
 
 ## Payload format
 
@@ -141,7 +151,7 @@ The entire object is sealed with `crypto_box_seal`. Your endpoint receives ciphe
 
 > No IP, no timezone, no fingerprints — just the data you explicitly collect.
 
----
+
 
 ## Field configuration
 
@@ -160,7 +170,7 @@ fse field add phone type:tel required:false
 fse field remove company
 ```
 
----
+
 
 ## CSS hooks
 
@@ -171,7 +181,7 @@ fse field remove company
 | `[data-fse-status="success"]` | Set on status element on success |
 | `[data-fse-status="error"]` | Set on status element on error |
 
----
+
 
 ## What formseal-embed does not do
 
@@ -182,22 +192,17 @@ fse field remove company
 
 These are intentional.
 
----
+
 
 ## Documentation
 
-- [Getting started](/docs/cli/getting-started.md)
-- [CLI → Commands](/docs/cli/commands.md)
-- [CLI → Cheatsheet](/docs/cli/cheatsheet.md)
-- [Browser runtime → How it works](/docs/browser-runtime/how-it-works.md)
-- [Browser runtime → HTML](/docs/browser-runtime/html.md)
-- [Browser runtime → Fields](/docs/browser-runtime/fields.md)
-- [Browser runtime → JavaScript](/docs/browser-runtime/javascript.md)
-- [Browser runtime → Config](/docs/browser-runtime/config.md)
-- [Decryption](/docs/decryption.md)
-- [Security](/.github/SECURITY.md)
+Full documentation is in the [docs](./docs/README.md) directory.
 
----
+## For developers
+
+- [CONTRIBUTING.md](./CONTRIBUTING.md) — Full contributing guide
+
+
 
 ## License
 

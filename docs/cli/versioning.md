@@ -21,9 +21,17 @@ The entire payload (including the version field) is encrypted. Storage sees only
 | Version | Status |
 |---|---|
 | `fse.v1.0` | current |
+| `fse.v1.x` | forward-compatible |
+| anything else | invalid |
+
+All `v1.x` releases share the same envelope structure. Minor increments may add fields inside `data` but won't break existing decryptors. Incompatible changes would increment the major version (`v2.0`).
 
 All versions and their schemas are documented in [Schemas](../payload-schemas/README.md).
 
-## Decryption
+## Ecosystem versioning
 
-When you decrypt, the `version` field tells your tool which schema to use. See [Decryption](../decryption.md).
+| Tool | Handles versioning |
+|------|-------------------|
+| formseal-embed | Creates versioned payloads (this tool) |
+| [formseal-fetch](https://github.com/useFormseal/fetch) | Passes through (doesn't parse) |
+| [formseal-decrypt](https://github.com/useFormseal/decrypt) | Validates and decrypts versioned payloads |

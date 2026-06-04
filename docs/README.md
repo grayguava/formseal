@@ -28,18 +28,17 @@ Use it together with [formseal-fetch](https://github.com/useFormseal/fetch) to d
 ## Workflow
 
 ```
-Browser (formseal-embed)
+formseal-embed (browser encryption)
        │
-       │ (encrypted submissions)
-       ▼ 
- Your server / endpoint
+       ▼ (encrypted submissions)
+  Storage backend
        │
-       │ (fsf fetch)
-       ▼ 
- ciphertexts.jsonl ──► Your PC
+       ▼ (fsf fetch)
+  formseal.ct.jsonl
        │
-       │ (fsd decrypt)
-       ▼ 
- decrypted plaintexts
- 
+       ▼ (fsd decrypt)
+  formseal.decrypted.jsonl
+       │
+       ▼
+  You
 ```
